@@ -2,10 +2,15 @@
 This is a CMPS183 project
 
 Christopher Mok
+<br/>
 Matthew Lo
+<br/>
 Winggo Tse
+<br/>
 Gabriel Cabral
+<br/>
 Steven Suh
+<br/>
 
 # Install
 Our project uses two npm environments (backend in /Code and frontend in /Code/client)
