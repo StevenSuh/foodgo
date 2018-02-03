@@ -3,6 +3,7 @@ This is a CMPS183 project
 
 # Install
 Our project uses two npm environments (backend in /Code and frontend in /Code/client)
+<br/>
 Therefore you need to run `npm install` twice in respective directories
 
 # Run
