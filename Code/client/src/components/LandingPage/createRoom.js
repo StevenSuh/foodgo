@@ -1,6 +1,25 @@
 import React, { Component } from 'react';
 
 class CreateRoom extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { term: '' };
+
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onButtonClick = this.onButtonClick.bind(this);
+  }
+
+  // controlled input
+  onInputChange(event) {
+    this.setState({ ...this.state, term: event.target.value });
+  }
+
+  // when createRoom is clicked
+  onButtonClick() {
+    // use this.state.term for the value
+  }
+
   render() {
     return (
       <div className="createRoom">
@@ -11,11 +30,18 @@ class CreateRoom extends Component {
         <div className="createRoom_container">
           <div className="createRoom_container_wrapper">
             <div className="createRoom_input_wrapper">
-              <input id="createRoom_input" type="number" placeholder="# Number of People" />
+              <input 
+                id="createRoom_input" 
+                type="number" 
+                placeholder="# Number of People" 
+                onChange={this.onInputChange}
+                value={this.state}
+              />
             </div>
 
             <button 
               id="createRoom_button"
+              onClick={this.onButtonClick}
             >
               Create Room
             </button>
