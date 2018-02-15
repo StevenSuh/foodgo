@@ -3,8 +3,6 @@ import RoomModal from './roomModal';
 
 import classes from './styles.css';
 
-import classes from './styles.css';
-
 class CreateRoom extends Component {
   constructor(props) {
     super(props);
