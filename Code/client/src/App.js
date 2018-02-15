@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
-import firebase from 'firebase';
 
 class App extends Component {
 
