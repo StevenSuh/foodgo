@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
+import SurveyPage from './components/SurveyPage';
 
 class App extends Component {
 
@@ -22,6 +23,7 @@ class App extends Component {
     return (
       <Switch>
         <Route path='/' exact component={() => <LandingPage db = {firebase}/>}/>
+        <Route path='/survey' exact component={() => <SurveyPage/>}/>
       </Switch>
     );
   }
