@@ -4,7 +4,7 @@ class CreateRoom extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { term: '' };
+    this.state = {};
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
@@ -17,10 +17,15 @@ class CreateRoom extends Component {
 
   // when createRoom is clicked
   onButtonClick() {
+    let dbCon = this.props.db.database().ref('/numPeople');
+    dbCon.push({
+      numPeople: this.state.term
+    });
     // use this.state.term for the value
   }
 
   render() {
+    console.log(this.props);
     return (
       <div className="createRoom">
         <h6 className="createRoom_title">
@@ -35,7 +40,6 @@ class CreateRoom extends Component {
                 type="number" 
                 placeholder="# Number of People" 
                 onChange={this.onInputChange}
-                value={this.state}
               />
             </div>
 

@@ -13,7 +13,7 @@ class LandingPage extends Component {
           foodgo
         </h2>
 
-        <CreateRoom />
+        <CreateRoom db = {this.props.db}/>
 
         <footer className="landingPage_footer">
           <p className="landingPage_footer_text">
