@@ -1,0 +1,31 @@
+body{
+	background-color: white;
+}
+
+.inputPref_box {
+	box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+	width: 500px;
+	position: relative;
+	display: inline-block;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.input_title {
+	text-align: center;
+	margin: 16px 0 16px 0;
+	font-size: 22px;
+} 
+
+.input_form {
+	width: 60%;
+	margin: auto;
+}
+
+.genre_input {
+	width: 100%;
+}
+
+.inputPref_box label{
+	font-size: 14px;
+}
