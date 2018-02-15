@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import RoomModal from './roomModal';
+
+import classes from './styles.css';
 
 import classes from './styles.css';
 
@@ -6,7 +9,7 @@ class CreateRoom extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = { term: '', showPopUp: false, roomKey: '' };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
@@ -20,14 +23,26 @@ class CreateRoom extends Component {
   // when createRoom is clicked
   onButtonClick() {
     let dbCon = this.props.db.database().ref('/numPeople');
-    dbCon.push({
+    const dbConRef = dbCon.push({
       numPeople: this.state.term
     });
-    // use this.state.term for the value
+
+    // display popup
+    this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
+  }
+
+  renderPopUp() {
+    if (this.state.showPopUp) {
+      return (
+        <RoomModal compKey={this.state.roomKey} />
+      );
+    }
+    return;
   }
 
   render() {
     console.log(this.props);
+    console.log('styles:', classes);
     return (
       <div className={classes.createRoom}>
         <h6 className={classes.createRoom_title}>
@@ -42,6 +57,7 @@ class CreateRoom extends Component {
                 type="number" 
                 placeholder="# Number of People" 
                 onChange={this.onInputChange}
+                value={this.state.term}
               />
             </div>
 
