@@ -11,6 +11,7 @@ class CreateRoom extends Component {
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
+    this.onOverlayClick = this.onOverlayClick.bind(this);
   }
 
   // controlled input
@@ -29,10 +30,16 @@ class CreateRoom extends Component {
     this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
   }
 
-  renderPopUp() {
+  onOverlayClick(event) {
+    if (event.target === event.currentTarget) {
+      this.setState({ ...this.state, showPopUp: false });
+    }
+  }
+
+  renderModal() {
     if (this.state.showPopUp) {
       return (
-        <RoomModal compKey={this.state.roomKey} />
+        <RoomModal compKey={this.state.roomKey} onCompClick={this.onOverlayClick} />
       );
     }
     return;
@@ -40,7 +47,6 @@ class CreateRoom extends Component {
 
   render() {
     console.log(this.props);
-    console.log('styles:', classes);
     return (
       <div className={classes.createRoom}>
         <h6 className={classes.createRoom_title}>
@@ -71,6 +77,7 @@ class CreateRoom extends Component {
         <p className={classes.createRoom_belowText}>
           or <span className={classes.createRoom_belowText_underlined}>Join a Room</span>
         </p>
+        {this.renderModal()}
       </div>
     );
   }
