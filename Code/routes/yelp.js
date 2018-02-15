@@ -9,10 +9,14 @@ const searchRequest = {
   location: 'san francisco, ca'
 };
 
+// argument docs
+// https://www.yelp.com/developers/documentation/v3/business_search
+
 // main
 module.exports = (app) => {
   app.get('/api/', async (request, result) => {
-    const response = await client.search(searchRequest);
+    // request.body
+    const response = await client.search(request.body);
 
     const firstResult = response.jsonBody.businesses[0];
     const prettyJson = JSON.stringify(firstResult, null, 4);
