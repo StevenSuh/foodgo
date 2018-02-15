@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import classes from './styles.css';
+
 class CreateRoom extends Component {
   constructor(props) {
     super(props);
@@ -27,16 +29,16 @@ class CreateRoom extends Component {
   render() {
     console.log(this.props);
     return (
-      <div className="createRoom">
-        <h6 className="createRoom_title">
+      <div className={classes.createRoom}>
+        <h6 className={classes.createRoom_title}>
           Choose your restaurant.
         </h6>
 
-        <div className="createRoom_container">
-          <div className="createRoom_container_wrapper">
-            <div className="createRoom_input_wrapper">
+        <div className={classes.createRoom_container}>
+          <div className={classes.createRoom_container_wrapper}>
+            <div className={classes.createRoom_input_wrapper}>
               <input 
-                id="createRoom_input" 
+                id={classes.createRoom_input}
                 type="number" 
                 placeholder="# Number of People" 
                 onChange={this.onInputChange}
@@ -44,7 +46,7 @@ class CreateRoom extends Component {
             </div>
 
             <button 
-              id="createRoom_button"
+              id={classes.createRoom_button}
               onClick={this.onButtonClick}
             >
               Create Room
@@ -52,8 +54,8 @@ class CreateRoom extends Component {
           </div>
         </div>
 
-        <p className="createRoom_belowText">
-          or <span className="createRoom_belowText_underlined">Join a Room</span>
+        <p className={classes.createRoom_belowText}>
+          or <span className={classes.createRoom_belowText_underlined}>Join a Room</span>
         </p>
       </div>
     );
