@@ -18,8 +18,7 @@ module.exports = (app) => {
     // request.body
     const response = await client.search(request.body);
 
-    const firstResult = response.jsonBody.businesses[0];
-    const prettyJson = JSON.stringify(firstResult, null, 4);
-    console.log(prettyJson);
+    const searchResult = response.jsonBody.businesses;
+    console.log(searchResult);
   });
 };
