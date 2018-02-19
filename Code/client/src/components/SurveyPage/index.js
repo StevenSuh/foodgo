@@ -7,10 +7,11 @@ import classes from './styles.css';
 
 class SurveyPage extends Component {
 	render() {
+		console.log(this.props);
 		return(
 			<div>
 				<header>foodgo</header>
-				<InputPref/>
+				<InputPref db = {this.props.db} idKey = {this.props.match.params.id}/>
 			</div>
 		);
 	}
