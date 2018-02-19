@@ -23,7 +23,7 @@ class App extends Component {
     return (
       <Switch>
         <Route path='/' exact component={() => <LandingPage db = {firebase}/>}/>
-        <Route path='/survey' exact component={() => <SurveyPage/>}/>
+        <Route path='/:id' exact component={() => <SurveyPage db = {firebase}/>}/>
       </Switch>
     );
   }
