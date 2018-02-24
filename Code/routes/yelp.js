@@ -14,11 +14,31 @@ const searchRequest = {
 
 // main
 module.exports = (app) => {
-  app.get('/api/', async (request, result) => {
+  app.get('/api/search/', async (request, result) => {
     // request.body
-    const response = await client.search(request.body);
+    const data = {
+      term: request.query.categories,
+      latitude: parseFloat(request.query.lat),
+      longitude: parseFloat(request.query.lng),
+      price: request.query.price,
+      radius: milesToMeters(request.query.radius || 15),
+      limit: 10,
+      offset: request.query.offset || 0
+    };
+    console.log(data);
+    const yelpResponse = await client.search(data);
 
-    const searchResult = response.jsonBody.businesses;
-    console.log(searchResult);
+    const searchResult = yelpResponse.jsonBody.businesses;
+    result.send(searchResult);
   });
 };
+
+
+// 1 mile = 1609.34 meters
+// needs to return int
+function milesToMeters(radius) {
+  let value = parseInt(radius);
+  value = Math.round(value*1609.34);
+
+  return Math.min(value, 40000);
+}

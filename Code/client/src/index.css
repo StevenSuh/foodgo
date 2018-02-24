@@ -5,6 +5,7 @@ body {
   height: 100%;
   font-family: 'Poppins', sans-serif;
   color: #4A4A4A;
+  background-color: #FFFAFA;
 }
 
 h2,
@@ -20,4 +21,5 @@ button {
   border: none;
   outline: none;
   font-family: 'Poppins', sans-serif;
+  color: #4A4A4A;
 }

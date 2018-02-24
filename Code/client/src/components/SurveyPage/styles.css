@@ -1,5 +1,27 @@
-body{
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 100;
+}
+
+.items_wrapper {
+	box-sizing: border-box;
+	position: relative;
+	top: 7.5vh;
+	width: 650px;
+	margin: auto;
 	background-color: #FFFAFA;
+	border-radius: 10px;
+	box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+	text-align: center;
+	padding: 30px 0;
+}
+
+.items_title {
 }
 
 .inputPref_box {
@@ -7,19 +29,27 @@ body{
 	width: 500px;
 	position: relative;
 	display: inline-block;
+	top: 10vh;
 	left: 50%;
 	transform: translateX(-50%);
 	padding: 30px;
+	border-radius: 10px;
+}
+
+.label {
+	font-weight: 500;
+	font-size: 12px;
 }
 
 .input_title {
 	text-align: center;
-	font-size: 22px;
+	font-size: 24px;
 } 
 
 .input_form {
 	width: 60%;
 	margin: auto;
+	margin-top: 30px;
 }
 
 .input_form p {
@@ -30,10 +60,27 @@ body{
 .text_input {
 	width: 100%;
 	font-size: 14px;
-	background-color: #FFFAFA;
+	padding: 5px;
+	background-color: rgba(0,0,0,0);
 	border-style: solid;
-	border-width: 0 0 1px 0;
+	border-width: 0 0 2px 0;
 	border-color: #FF8A80;
+}
+
+.text_input_wrapper {
+  position: relative;
+}
+
+.text_input_wrapper::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(0,0,0,0);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.15);
+
 }
 
 .price_input {
@@ -51,14 +98,83 @@ body{
 	position: relative;
 	display: block;
 	margin: 30px auto 0;
-	width: 80px;
 	color: white;
-	font-size: 14px;
-	height: 30px;
+	font-size: 18px;
+	font-weight: 500;
+	padding: 6px 15px;
+	border-radius: 50px;
 	background-color: #FF8A80;
-	border-radius: 16px;
+	box-shadow: 0 5px 20px rgba(255, 138, 128, 0.5);
+	cursor: pointer;
 }
 
 .inputPref_box label{
 	font-size: 14px;
+}
+
+.restaurant_wrapper {
+	margin-top: 15px;
+	height: 450px;
+	overflow-y: auto;
+}
+
+.restaurant_item_wrapper {
+	position: relative;
+	background-color: #FFFAFA;
+	padding: 10px;
+	text-align: left;
+	font-size: 12px;
+}
+
+.restaurant_item_wrapper::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,138,128,0.1);
+}
+
+.restaurant_item_wrapper:nth-child(2n)::after {
+	background-color: rgba(0,0,0,0);
+}
+
+.restaurant_main {
+	margin-left: 15px;
+	display: inline-block;
+}
+
+.restaurant_main h4 {
+	font-size: 16px;
+}
+
+.restaurant_img {
+	width: 60px;
+	height: 60px;
+	border-radius: 5px;
+	float: left;
+}
+
+.restaurant_ratings_wrapper {
+	line-height: 20px;
+	margin-bottom: 2px;
+}
+
+.restaurant_aside {
+	float: right;
+	text-align: right;
+}
+
+.restaurant_category {
+	line-height: 24px;
+}
+
+.restaurant_distance {
+	line-height: 20px;
+}
+
+.star {
+	fill: #FF8A80;
+	vertical-align: bottom;
 }

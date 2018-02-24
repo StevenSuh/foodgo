@@ -1,6 +1,9 @@
-header {
-	position: left;
-	padding-top: 2vh;
-  font-size: 50px;
-  font-weight: 350;
+.header {
+  font-size: 36px;
+  line-height: 54px;
+  font-weight: 600;
+  padding-top: 20px;
+  padding-left: 50px;
+  color: white;
+  background-color: #FF8A80;
 }
