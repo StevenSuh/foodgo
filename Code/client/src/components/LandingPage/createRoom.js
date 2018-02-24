@@ -23,7 +23,8 @@ class CreateRoom extends Component {
   onButtonClick() {
     let dbCon = this.props.db.database().ref('/numPeople');
     const dbConRef = dbCon.push({
-      numPeople: this.state.term
+      numPeople: this.state.term,
+      currPeople: 0
     });
 
     // display popup
