@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
 
 import OutputList from './outputList';
 
@@ -15,7 +16,9 @@ class InputPref extends Component {
 			price: '',
 			radius: '',
 			location: '',
-			showOutput: false
+			showOutput: false,
+			finishedInput: false,
+			initialized: false
 		};
 
 		this.onSubmitClick = this.onSubmitClick.bind(this);
@@ -23,6 +26,7 @@ class InputPref extends Component {
 		this.onInputChange = this.onInputChange.bind(this);
 
 		this.renderOutput = this.renderOutput.bind(this);
+		this.onSubmitData = this.onSubmitData.bind(this);
 	}
 
 	// checks if the group exists
@@ -36,12 +40,20 @@ class InputPref extends Component {
 		const id = this.props.idKey;
 		// firebase syntax
 		this.props.db.database().ref('numPeople').once("value", snapshot => {
-			const key = snapshot.hasChild(id);
-			if(key){
-				console.log("Key exists!");
-				this.setState({ ...this.state, doesKeyExist: true });
+			const key = snapshot.child(id);
+
+			if (key && localStorage.getItem(`foodgo_${id}`)) {
+				const value = key.val();
+				
+				if (value.currPeople === value.numPeople) {
+					return this.props.history.push(`/${id}/vote`);
+				}
+
+				return this.setState({ ...this.state, initialized: true, doesKeyExist: true, finishedInput: true });
 			}
+			this.setState({ ...this.state, initialized: true, doesKeyExist: true });
 		});
+		// this.setState({ ...this.state, initialized: true });
 	}
 
 	onSubmitClick(event) {
@@ -57,6 +69,43 @@ class InputPref extends Component {
 		this.setState({ ...this.state, [event.target.name]: event.target.value });
 	}
 
+	onSubmitData(data) {
+		const id = this.props.idKey;
+		const db = this.props.db.database().ref(`numPeople/${id}`);
+
+		db.once('value', snapshot => {
+			const value = snapshot.val();
+
+			if (value.currPeople < value.numPeople) {
+				const newData = { ...value };
+				newData.currPeople += 1;
+
+				if (!newData.restaurants) {
+					newData.restaurants = [];
+				}
+				newData.restaurants.push(data[0].props.compData);
+				newData.restaurants.push(data[1].props.compData);
+
+				db.update(newData, error => {
+					// set this browser to valid browser
+					localStorage.setItem(`foodgo_${id}`, 1);
+					
+					// on value change
+					db.on('value', dataSnapshot => {
+						const updatedData = dataSnapshot.val();
+						console.log('updated:', updatedData);
+						if (updatedData.currPeople === updatedData.numPeople) {
+							this.props.history.push(`/${id}/vote`);
+							db.off('value');
+						}
+					});
+					
+					this.setState({ ...this.state, showOutput: false, finishedInput: true });
+				});
+			}
+		});
+	}
+
 	renderOutput() {
 		if (this.state.showOutput) {
 			const data = { ...this.state };
@@ -69,6 +118,7 @@ class InputPref extends Component {
         	compData={data}
         	compLocation={this.state.location}
         	compClose={this.onOutputClose}
+        	compSubmit={this.onSubmitData}
         />, 
         document.getElementById('modal')
       );
@@ -77,16 +127,36 @@ class InputPref extends Component {
 		}
 	}
 
-	render(){
-		console.log(this.state);
+	KeyDoesntExist = (
+		<h1 style={{ textAlign: 'center' }}>
+			This group does not exist!
+			<br/>
+			Please check your link again.
+		</h1>
+	);
 
-		const KeyDoesntExist = (
-			<h1 style={{ textAlign: 'center' }}>
-				This group does not exist!
-				<br/>
-				Please check your link again.
+	waitingOnOthers = (
+		<div>
+			<h1 style={{ textAlign: 'center', margin: '1em' }}>
+				Thanks for your input.
 			</h1>
-		);
+			<h3 style={{ textAlign: 'center' }}>
+				Waiting on others				
+			</h3>
+			<br/>
+	    <div className={classes.loading}>
+	      <svg className={classes.circular} viewBox="25 25 50 50">
+	        <circle className={classes.path} cx="50" cy="50" r="20" fill="none" strokeWidth="3" strokeMiterlimit="10"/>
+	      </svg>
+	    </div>
+		</div>
+	)
+
+	render(){
+		if (!this.state.initialized) {
+			return '';
+		}
+		console.log(this.state);
 
 		const KeyExists = (
 			<div>
@@ -95,7 +165,7 @@ class InputPref extends Component {
 
 					<div>
 						<form className={classes.input_form}>
-							<label className={classes.label} htmlFor="genre">Preferred Genres</label><br />
+							<label className={classes.label} htmlFor="genre">Search Term</label><br />
 							<div className={classes.text_input_wrapper}>
 								<input type="text" name="categories" className={classes.text_input} id="genre" placeholder="Ex: American, Chinese, Italian ..." 
 									value={this.state.categories}
@@ -148,12 +218,13 @@ class InputPref extends Component {
 		this.renderOutput();
 		// conditional render
 		if(this.state.doesKeyExist){
+			if (this.state.finishedInput) {
+				return this.waitingOnOthers;
+			}
 			return KeyExists;
 		}
-		else{
-			return KeyDoesntExist;
-		}
+		return this.KeyDoesntExist;
 	}
 }
 
-export default InputPref;
+export default withRouter(InputPref);

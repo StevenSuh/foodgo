@@ -81,7 +81,7 @@
   border-radius: 50px;
   box-shadow: 0 5px 20px rgba(255,138,128,0.5);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all 0.1s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 #createRoom_button::after,
 .room_modal_button::after {
@@ -93,7 +93,7 @@
   height: 100%;
   border-radius: 50px;
   background-color: rgba(0,0,0,0);
-  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all 0.1s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 #createRoom_button:active,
 .room_modal_button:active {

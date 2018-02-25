@@ -25,7 +25,6 @@ module.exports = (app) => {
       limit: 10,
       offset: request.query.offset || 0
     };
-    console.log(data);
     const yelpResponse = await client.search(data);
 
     const searchResult = yelpResponse.jsonBody.businesses;
