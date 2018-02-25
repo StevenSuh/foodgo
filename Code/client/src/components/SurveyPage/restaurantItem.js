@@ -3,6 +3,14 @@ import React, { Component } from 'react';
 import classes from './styles.css';
 
 class RestaurantItem extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { selected: false };
+
+    this.onItemClick = this.onItemClick.bind(this);
+  }
+
   renderFullstar() {
     return (
       <svg className={classes.star} width="20" height="20" viewBox="0 0 20 20">
@@ -27,6 +35,16 @@ class RestaurantItem extends Component {
     );
   }
 
+  onItemClick() {
+    if (this.state.selected) {
+      this.props.compUnselect(this.props.compIndex);
+      this.setState({ selected: false });
+    } else {
+      this.props.compSelect(this.props.compIndex);
+      this.setState({ selected: true });
+    }
+  }
+
   render() {
     console.log(this.props);
     const data = this.props.compData;
@@ -43,7 +61,9 @@ class RestaurantItem extends Component {
       stars.push(<span key={stars.length}>{this.renderEmptystar()}</span>);
 
     return (
-      <div className={classes.restaurant_item_wrapper}>
+      <div className={`${classes.restaurant_item_wrapper} ${this.state.selected ? classes.selected : ''}`}
+        onClick={this.onItemClick}
+      >
         <img className={classes.restaurant_img} src={data.image_url} alt={data.id} />
 
         <div className={classes.restaurant_main}>
@@ -63,7 +83,7 @@ class RestaurantItem extends Component {
 
         <aside className={classes.restaurant_aside}>
           <div className={classes.restaurant_category}>
-            {`${data.categories.map(el => el.title).join(', ')} – ${data.price}`}
+            {`${data.categories[0].title} – ${data.price || 'none'}`}
           </div>
 
           <div className={classes.restaurant_distance}>

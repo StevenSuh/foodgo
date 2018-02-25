@@ -4,6 +4,7 @@ import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import SurveyPage from './components/SurveyPage';
+import VotingPage from './components/VotingPage';
 
 class App extends Component {
 
@@ -24,6 +25,7 @@ class App extends Component {
       <Switch>
         <Route path='/' exact component={() => <LandingPage db = {firebase}/>}/>
         <Route path='/:id' exact component={() => <SurveyPage db = {firebase}/>}/>
+        <Route path='/:id/vote' exact component={() => <VotingPage db = {firebase}/>}/>
       </Switch>
     );
   }

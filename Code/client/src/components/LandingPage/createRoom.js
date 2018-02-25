@@ -20,10 +20,11 @@ class CreateRoom extends Component {
   }
 
   // when createRoom is clicked
-  onButtonClick() {
+  onButtonClick(event) {
+    event.preventDefault();
     let dbCon = this.props.db.database().ref('/numPeople');
     const dbConRef = dbCon.push({
-      numPeople: this.state.term,
+      numPeople: parseInt(this.state.term, 10),
       currPeople: 0
     });
 
@@ -55,7 +56,7 @@ class CreateRoom extends Component {
         </h6>
 
         <div className={classes.createRoom_container}>
-          <div className={classes.createRoom_container_wrapper}>
+          <form className={classes.createRoom_container_wrapper}>
             <div className={classes.createRoom_input_wrapper}>
               <input 
                 id={classes.createRoom_input}
@@ -72,7 +73,7 @@ class CreateRoom extends Component {
             >
               Create Room
             </button>
-          </div>
+          </form>
         </div>
 
         <p className={classes.createRoom_belowText}>
