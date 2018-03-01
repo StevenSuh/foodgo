@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
+import { hot } from 'react-hot-loader';
+
 import LandingPage from './components/LandingPage';
 import SurveyPage from './components/SurveyPage';
 import VotingPage from './components/VotingPage';
@@ -31,4 +33,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default hot(module)(App);
