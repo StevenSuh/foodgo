@@ -31,27 +31,27 @@ class InputPref extends Component {
 
 	// checks if the group exists
 	componentDidMount() {
-		console.log(navigator.geolocation.getCurrentPosition(position => {
+		navigator.geolocation.getCurrentPosition(position => {
 			console.log(position);
 			this.setState({ ...this.state, location: { lat: position.coords.latitude, lng: position.coords.longitude } });
 		}, err => {
 			console.log(err);
-		}));
+		});
 		const id = this.props.idKey;
 		// firebase syntax
 		this.props.db.database().ref('numPeople').once("value", snapshot => {
-			const key = snapshot.child(id);
+			const key = snapshot.hasChild(id);
 
 			if (key && localStorage.getItem(`foodgo_${id}`)) {
-				const value = key.val();
+				const value = snapshot.child(id).val();
 				
 				if (value.currPeople === value.numPeople) {
 					return this.props.history.push(`/${id}/vote`);
 				}
 
-				return this.setState({ ...this.state, initialized: true, doesKeyExist: true, finishedInput: true });
+				return this.setState({ ...this.state, initialized: true, doesKeyExist: key, finishedInput: true });
 			}
-			this.setState({ ...this.state, initialized: true, doesKeyExist: true });
+			this.setState({ ...this.state, initialized: true, doesKeyExist: key });
 		});
 		// this.setState({ ...this.state, initialized: true });
 	}
