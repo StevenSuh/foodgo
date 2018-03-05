@@ -1,0 +1,13 @@
+.header {
+  font-size: 36px;
+  line-height: 54px;
+  font-weight: 600;
+  padding: 20px 0 5px 50px;
+  color: white;
+  background-color: #FF8A80;
+}
+
+.header_link {
+  text-decoration: none;
+  color: inherit;
+}

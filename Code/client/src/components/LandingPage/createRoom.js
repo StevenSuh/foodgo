@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
+import RoomModal from './roomModal';
+
+import classes from './styles.css';
 
 class CreateRoom extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { term: '' };
+    this.state = { term: '', showPopUp: false, roomKey: '' };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
+    this.onOverlayClick = this.onOverlayClick.bind(this);
   }
 
   // controlled input
@@ -16,41 +20,66 @@ class CreateRoom extends Component {
   }
 
   // when createRoom is clicked
-  onButtonClick() {
-    // use this.state.term for the value
+  onButtonClick(event) {
+    event.preventDefault();
+    let dbCon = this.props.db.database().ref('/numPeople');
+    const dbConRef = dbCon.push({
+      numPeople: parseInt(this.state.term, 10),
+      currPeople: 0
+    });
+
+    // display popup
+    this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
+  }
+
+  onOverlayClick(event) {
+    if (event.target === event.currentTarget) {
+      this.setState({ ...this.state, showPopUp: false });
+    }
+  }
+
+  renderModal() {
+    if (this.state.showPopUp) {
+      return (
+        <RoomModal compKey={this.state.roomKey} onCompClick={this.onOverlayClick} />
+      );
+    }
+    return;
   }
 
   render() {
+    console.log(this.props);
     return (
-      <div className="createRoom">
-        <h6 className="createRoom_title">
+      <div className={classes.createRoom}>
+        <h6 className={classes.createRoom_title}>
           Choose your restaurant.
         </h6>
 
-        <div className="createRoom_container">
-          <div className="createRoom_container_wrapper">
-            <div className="createRoom_input_wrapper">
+        <div className={classes.createRoom_container}>
+          <form className={classes.createRoom_container_wrapper}>
+            <div className={classes.createRoom_input_wrapper}>
               <input 
-                id="createRoom_input" 
+                id={classes.createRoom_input}
                 type="number" 
                 placeholder="# Number of People" 
                 onChange={this.onInputChange}
-                value={this.state}
+                value={this.state.term}
               />
             </div>
 
             <button 
-              id="createRoom_button"
+              id={classes.createRoom_button}
               onClick={this.onButtonClick}
             >
               Create Room
             </button>
-          </div>
+          </form>
         </div>
 
-        <p className="createRoom_belowText">
-          or <span className="createRoom_belowText_underlined">Join a Room</span>
+        <p className={classes.createRoom_belowText}>
+          or <span className={classes.createRoom_belowText_underlined}>Join a Room</span>
         </p>
+        {this.renderModal()}
       </div>
     );
   }
