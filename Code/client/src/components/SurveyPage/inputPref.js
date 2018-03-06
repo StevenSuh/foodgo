@@ -1,6 +1,12 @@
+/* eslint react/no-multi-comp: 0, max-len: 0 */
+/* eslint import/no-webpack-loader-syntax: off */
+import '!style-loader!css-loader!rc-slider/assets/index.css';
+
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
+
+import Slider from 'rc-slider';
 
 import OutputList from './outputList';
 
@@ -14,7 +20,7 @@ class InputPref extends Component {
 			doesKeyExist: false,
 			categories: '',
 			price: '',
-			radius: '',
+			radius: 1,
 			location: '',
 			showOutput: false,
 			finishedInput: false,
@@ -66,7 +72,21 @@ class InputPref extends Component {
 	}
 
 	onInputChange(event) {
-		this.setState({ ...this.state, [event.target.name]: event.target.value });
+		if (event.target) {
+			const name = event.target.name;
+
+			if (name === 'price') {
+		    if (event.target.checked) {
+		    	event.target.nextSibling.classList.add(classes.active);
+		    } else {
+		    	event.target.nextSibling.classList.remove(classes.active);
+		    }
+			}
+			this.setState({ ...this.state, [name]: event.target.value });
+		} else {
+			console.log(event);
+			this.setState({ ...this.state, radius: event });
+		}
 	}
 
 	onSubmitData(data) {
@@ -175,34 +195,58 @@ class InputPref extends Component {
 							<br />
 							
 							<p className={classes.label}>Price range</p><br />
-							<label htmlFor="price1">$</label>
-							<input type="radio" name="price" id="price1" value="1" className={classes.price_input} 
-								onChange={this.onInputChange}
-								checked={this.state.price === '1'}
-							/>
+							<div className={classes.price_input_wrapper}>
+								<label htmlFor="price1">$</label>
+								<input type="radio" name="price" id="price1" value="1" className={`${classes.price_input} ${classes.checkbox}`} 
+									onChange={this.onInputChange}
+									checked={this.state.price === '1'}
+								/>
+								<span className={`${classes.checkbox_span} ${this.state.price === '1' ? classes.active : ''}`}>
+									<span className={classes.checkbox_check} />
+								</span>
 
-							<label htmlFor="price2">$$</label>
-							<input type="radio" name="price" id="price2" value="1, 2" className={classes.price_input} 
-								onChange={this.onInputChange}
-								checked={this.state.price === '1, 2'}
-							/>
+								<label htmlFor="price2">$$</label>
+								<input type="radio" name="price" id="price2" value="1, 2" className={`${classes.price_input} ${classes.checkbox}`}
+									onChange={this.onInputChange}
+									checked={this.state.price === '1, 2'}
+								/>
+								<span className={`${classes.checkbox_span} ${this.state.price === '1, 2' ? classes.active : ''}`}>
+									<span className={classes.checkbox_check} />
+								</span>
 
-							<label htmlFor="price3">$$$</label>
-							<input type="radio" name="price" id="price3" value="1, 2, 3" className={classes.price_input} 
-								onChange={this.onInputChange}
-								checked={this.state.price === '1, 2, 3'}
-							/>
+
+								<label htmlFor="price3">$$$</label>
+								<input type="radio" name="price" id="price3" value="1, 2, 3" className={`${classes.price_input} ${classes.checkbox}`} 
+									onChange={this.onInputChange}
+									checked={this.state.price === '1, 2, 3'}
+								/>
+								<span className={`${classes.checkbox_span} ${this.state.price === '1, 2, 3' ? classes.active : ''}`}>
+									<span className={classes.checkbox_check} />
+								</span>
+							</div>
 							<br />
 							<br />
 
 							<label htmlFor="distance" className={`${classes.distance} ${classes.label}`}>Distance</label>
-							<div className={classes.text_input_wrapper}>
-								<input type="number" name="radius" id="distance" className={classes.text_input} placeholder="Ex: 50 mi"
-									value={this.state.radius}
-									onChange={this.onInputChange}
+							<div style={{ width: '100%', margin: '0 0 40px 0' }} className={classes.slider_input_wrapper}>
+								<p className={classes.p} style={{ margin: '10px 0 10px 0', padding: 0, paddingLeft: 10 }}>{this.state.radius} mi</p>
+								<Slider name="radius" id="radius" min={1} max={25} 
+									value={this.state.radius} 
+									onChange={this.onInputChange} 
+									railStyle={{ height: 6 }}
+									dotStyle={{ backgroundColor: 'rgba(0,0,0,0)', borderColor: 'rgba(0,0,0,0)' }}
+									activeDotStyle={{ backgroundColor: 'rgba(0,0,0,0)', borderColor: 'rgba(0,0,0,0)' }}
+									trackStyle={{ backgroundColor: 'rgba(255,138,128,0.5)', height: 6 }}
+									handleStyle={{
+										borderColor: '#FF8A80',
+										borderWidth: 2,
+										height: 16,
+										width: 16,
+					          marginLeft: -6,
+          					marginTop: -6
+									}}
 								/>
 							</div>
-
 							<button 
 								className={classes.submit} 
 								onClick={this.onSubmitClick}
