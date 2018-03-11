@@ -60,6 +60,10 @@ class InputPref extends Component {
 						} else {
 							return this.setState({ ...this.state, location: newLocation, fullRoom: true, initialized: true, doesKeyExist: key, finishedInput: false });
 						}
+					} else {
+						if (localStorage.getItem(`foodgo_input_${id}`)) {
+							return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: true });
+						}
 					}
 
 					return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: false });
@@ -104,6 +108,9 @@ class InputPref extends Component {
 		const id = this.props.idKey;
 		const db = this.props.db.database().ref(`numPeople/${id}`);
 
+		const restaurant1 = data[0].props.compData;
+		const restaurant2 = data[1].props.compData;
+
 		db.once('value', async snapshot => {
 			let response;
 			const value = snapshot.val();
@@ -114,12 +121,23 @@ class InputPref extends Component {
 
 				if (!newData.restaurants) {
 					newData.restaurants = [];
-				}
-				response = await axios.get(`${url}api/detail/?id=${data[0].props.compData.id}`);
-				newData.restaurants.push(Object.assign(data[0].props.compData, response.data));
+					response = await axios.get(`${url}api/detail/?id=${restaurant1.id}`);
+					newData.restaurants.push(Object.assign(restaurant1, response.data));
 				
-				response = await axios.get(`${url}api/detail/?id=${data[1].props.compData.id}`);
-				newData.restaurants.push(Object.assign(data[1].props.compData, response.data));
+					response = await axios.get(`${url}api/detail/?id=${restaurant2.id}`);
+					newData.restaurants.push(Object.assign(restaurant2, response.data));
+				} else {
+
+					if (!newData.restaurants.find(el => el.id === restaurant1.id)) {
+						response = await axios.get(`${url}api/detail/?id=${restaurant1.id}`);
+						newData.restaurants.push(Object.assign(restaurant1, response.data));
+					}
+
+					if (!newData.restaurants.find(el => el.id === restaurant2.id)) {
+						response = await axios.get(`${url}api/detail/?id=${restaurant2.id}`);
+						newData.restaurants.push(Object.assign(restaurant2, response.data));
+					}
+				}
 
 				db.update(newData, error => {
 					// set this browser to valid browser
