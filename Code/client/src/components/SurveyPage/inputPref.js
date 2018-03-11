@@ -44,7 +44,7 @@ class InputPref extends Component {
 	componentDidMount() {
 		// navigator.geolocation.getCurrentPosition(position => {
 			// const newLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-			const newLocation = { lat: 60, lng: 60 };
+			const newLocation = { lat: 37, lng: -122 };
 
 			const id = this.props.idKey;
 			// firebase syntax
