@@ -42,8 +42,9 @@ class InputPref extends Component {
 
 	// checks if the group exists
 	componentDidMount() {
-		navigator.geolocation.getCurrentPosition(position => {
-			const newLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+		// navigator.geolocation.getCurrentPosition(position => {
+			// const newLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+			const newLocation = { lat: 60, lng: 60 };
 
 			const id = this.props.idKey;
 			// firebase syntax
@@ -65,9 +66,9 @@ class InputPref extends Component {
 				}
 				this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key });
 			});
-		}, err => {
-			console.log(err);
-		});
+		// }, err => {
+			// console.log(err);
+		// });
 
 		// this.setState({ ...this.state, initialized: true });
 	}
