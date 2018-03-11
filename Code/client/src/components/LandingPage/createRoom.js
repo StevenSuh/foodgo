@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import RoomModal from './roomModal';
 
 import classes from './styles.css';
@@ -12,6 +14,7 @@ class CreateRoom extends Component {
     this.onInputChange = this.onInputChange.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
     this.onOverlayClick = this.onOverlayClick.bind(this);
+    this.redirectToRoom = this.redirectToRoom.bind(this);
   }
 
   // controlled input
@@ -22,29 +25,35 @@ class CreateRoom extends Component {
   // when createRoom is clicked
   onButtonClick(event) {
     event.preventDefault();
-    let dbCon = this.props.db.database().ref('/numPeople');
-    const dbConRef = dbCon.push({
-      numPeople: parseInt(this.state.term, 10),
-      currPeople: 0
-    });
+    if (this.state.term) {
+      let dbCon = this.props.db.database().ref('/numPeople');
+      const dbConRef = dbCon.push({
+        numPeople: parseInt(this.state.term, 10),
+        votes: 0,
+        inputs: 0
+      });
 
-    // display popup
-    this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
+      // display popup
+      this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
+    }
   }
 
-  onOverlayClick(event) {
-    if (event.target === event.currentTarget) {
-      this.setState({ ...this.state, showPopUp: false });
-    }
+  onOverlayClick() {
+    this.setState({ ...this.state, showPopUp: false });
+  }
+
+  redirectToRoom() {
+    this.onOverlayClick();
+    this.props.history.push(`/${this.state.roomKey}`);
   }
 
   renderModal() {
     if (this.state.showPopUp) {
-      return (
-        <RoomModal compKey={this.state.roomKey} onCompClick={this.onOverlayClick} />
-      );
+      ReactDOM.render(<RoomModal compKey={this.state.roomKey} onCompClick={this.onOverlayClick} onRedirect={this.redirectToRoom} />,
+        document.getElementById('modal'));
+    } else {
+      ReactDOM.render(null, document.getElementById('modal'));      
     }
-    return;
   }
 
   render() {
@@ -85,4 +94,4 @@ class CreateRoom extends Component {
   }
 }
 
-export default CreateRoom;
+export default withRouter(CreateRoom);

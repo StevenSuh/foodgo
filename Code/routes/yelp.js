@@ -25,10 +25,33 @@ module.exports = (app) => {
       limit: 10,
       offset: request.query.offset || 0
     };
-    const yelpResponse = await client.search(data);
+    try {
+      const yelpResponse = await client.search(data);
+      const searchResult = yelpResponse.jsonBody.businesses;
 
-    const searchResult = yelpResponse.jsonBody.businesses;
-    result.send(searchResult);
+      result.send(searchResult);
+    } catch (err) {
+      return console.error(err);
+    }
+  });
+
+  app.get('/api/detail/', async (request, result) => {
+    const id = request.query.id;
+    const data = {};
+
+    try {
+      const hourResponse = await client.business(id);
+      const hourResult = hourResponse.jsonBody;
+
+      data.photos = hourResult.photos;
+
+      const reviewResponse = await client.reviews(id);
+      data.reviews = reviewResponse.jsonBody.reviews;
+      
+      result.send(data);
+    } catch (err) {
+      return console.error(err);
+    }
   });
 };
 

@@ -15,7 +15,8 @@ class OutputList extends Component {
       list: [], 
       selected: [],
       load: false, 
-      loadAct: false 
+      loadAct: false,
+      submitLoad: false
     };
     this.items = [];
 
@@ -36,7 +37,9 @@ class OutputList extends Component {
   onLoadMore() {
     const data = this.props.compData;
     const location = this.props.compLocation;
-    axios.get(`${url}/api/search/?categories=${data.categories}&price=${data.price}&radius=${data.radius}&lat=${location.lat}&lng=${location.lng}&offset=${this.state.list.length}`)
+
+    console.log(this);
+    axios.get(`${url}api/search/?categories=${data.categories}&price=${data.price}&radius=${data.radius}&lat=${location.lat}&lng=${location.lng}&offset=${this.state.list.length}`)
       .then(response => {
         // list
         console.log(response);
@@ -67,7 +70,8 @@ class OutputList extends Component {
 
   onOverlayClose(event) {
     if (event.target === event.currentTarget) {
-      this.props.compClose();
+      this.overlay.classList.add(classes.hide);
+      setTimeout(this.props.compClose, 300);
     }
   }
 
@@ -112,6 +116,7 @@ class OutputList extends Component {
 
   onSubmitClick() {
     if (this.state.selected.length === 2) {
+      this.setState({ ...this.state, submitLoad: true });
       this.props.compSubmit(this.state.selected);
     }
   }
@@ -119,7 +124,7 @@ class OutputList extends Component {
   load = (
     <div className={classes.showbox}>
       <svg className={classes.circular} viewBox="25 25 50 50">
-        <circle className={classes.path} cx="50" cy="50" r="20" fill="none" strokeWidth="3" strokeMiterlimit="10"/>
+        <circle className={classes.path} cx="50" cy="50" r="20" fill="none" strokeWidth="4" strokeMiterlimit="10"/>
       </svg>
     </div>
   );
@@ -127,11 +132,37 @@ class OutputList extends Component {
   render() {
     console.log(this);
 
+    let button = (
+      <button className={classes.submit}
+        onClick={this.onSubmitClick}
+      >
+        Submit
+      </button>
+    );
+
+    if (this.state.submitLoad) {
+      button = (
+        <div className={classes.showbox} style={{ transform: 'translateY(-5px)', padding: 0, height: '39.2px', margin: '30px auto 0' }}>
+          <svg className={classes.circular} viewBox="25 25 50 50">
+            <circle className={classes.path} cx="50" cy="50" r="20" fill="none" strokeWidth="4" strokeMiterlimit="10"/>
+          </svg>
+        </div>
+      );
+    }
+
     return (
       <div className={classes.overlay}
         onClick={this.onOverlayClose}
+        ref={input => {this.overlay = input}}
       >
         <div className={classes.items_wrapper}>
+          <div className={classes.items_close}
+            onClick={this.onOverlayClose}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14">
+              <path d="M 14 1.41L 12.59 0L 7 5.59L 1.41 0L 0 1.41L 5.59 7L 0 12.59L 1.41 14L 7 8.41L 12.59 14L 14 12.59L 8.41 7L 14 1.41Z"/>
+            </svg>
+          </div>
           <h2 className={classes.items_title}>Select 2 restaurants</h2>
           
           <div className={classes.restaurant_wrapper}
@@ -141,11 +172,7 @@ class OutputList extends Component {
             {this.state.load ? this.load : ''}
           </div>
           
-          <button className={classes.submit}
-            onClick={this.onSubmitClick}
-          >
-            Submit
-          </button>
+          {button}
         </div>
       </div>
     );
