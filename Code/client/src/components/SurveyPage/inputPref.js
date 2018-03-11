@@ -6,11 +6,15 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 
+import axios from 'axios';
+
 import Slider from 'rc-slider';
 
 import OutputList from './outputList';
 
 import classes from './styles.css';
+
+import url from '../../url';
 
 class InputPref extends Component {
 	constructor(props){
@@ -24,7 +28,8 @@ class InputPref extends Component {
 			location: '',
 			showOutput: false,
 			finishedInput: false,
-			initialized: false
+			initialized: false,
+			fullRoom: false
 		};
 
 		this.onSubmitClick = this.onSubmitClick.bind(this);
@@ -38,27 +43,32 @@ class InputPref extends Component {
 	// checks if the group exists
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(position => {
-			console.log(position);
-			this.setState({ ...this.state, location: { lat: position.coords.latitude, lng: position.coords.longitude } });
+			const newLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+
+			const id = this.props.idKey;
+			// firebase syntax
+			this.props.db.database().ref('numPeople').once("value", snapshot => {
+				const key = snapshot.hasChild(id);
+
+				if (key) {
+					const value = snapshot.child(id).val();
+					
+					if (value.inputs === value.numPeople) {
+						if (localStorage.getItem(`foodgo_input_${id}`)) {
+							return this.props.history.push(`/${id}/vote`);
+						} else {
+							return this.setState({ ...this.state, location: newLocation, fullRoom: true, initialized: true, doesKeyExist: key, finishedInput: false });
+						}
+					}
+
+					return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: false });
+				}
+				this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key });
+			});
 		}, err => {
 			console.log(err);
 		});
-		const id = this.props.idKey;
-		// firebase syntax
-		this.props.db.database().ref('numPeople').once("value", snapshot => {
-			const key = snapshot.hasChild(id);
 
-			if (key && localStorage.getItem(`foodgo_${id}`)) {
-				const value = snapshot.child(id).val();
-				
-				if (value.currPeople === value.numPeople) {
-					return this.props.history.push(`/${id}/vote`);
-				}
-
-				return this.setState({ ...this.state, initialized: true, doesKeyExist: key, finishedInput: true });
-			}
-			this.setState({ ...this.state, initialized: true, doesKeyExist: key });
-		});
 		// this.setState({ ...this.state, initialized: true });
 	}
 
@@ -93,28 +103,32 @@ class InputPref extends Component {
 		const id = this.props.idKey;
 		const db = this.props.db.database().ref(`numPeople/${id}`);
 
-		db.once('value', snapshot => {
+		db.once('value', async snapshot => {
+			let response;
 			const value = snapshot.val();
 
-			if (value.currPeople < value.numPeople) {
+			if (value.inputs < value.numPeople) {
 				const newData = { ...value };
-				newData.currPeople += 1;
+				newData.inputs += 1;
 
 				if (!newData.restaurants) {
 					newData.restaurants = [];
 				}
-				newData.restaurants.push(data[0].props.compData);
-				newData.restaurants.push(data[1].props.compData);
+				response = await axios.get(`${url}api/detail/?id=${data[0].props.compData.id}`);
+				newData.restaurants.push(Object.assign(data[0].props.compData, response.data));
+				
+				response = await axios.get(`${url}api/detail/?id=${data[1].props.compData.id}`);
+				newData.restaurants.push(Object.assign(data[1].props.compData, response.data));
 
 				db.update(newData, error => {
 					// set this browser to valid browser
-					localStorage.setItem(`foodgo_${id}`, 1);
+					localStorage.setItem(`foodgo_input_${id}`, 1);
 					
 					// on value change
 					db.on('value', dataSnapshot => {
 						const updatedData = dataSnapshot.val();
 						console.log('updated:', updatedData);
-						if (updatedData.currPeople === updatedData.numPeople) {
+						if (updatedData.inputs === updatedData.numPeople) {
 							this.props.history.push(`/${id}/vote`);
 							db.off('value');
 						}
@@ -150,6 +164,14 @@ class InputPref extends Component {
 	KeyDoesntExist = (
 		<h1 style={{ textAlign: 'center' }}>
 			This group does not exist!
+			<br/>
+			Please check your link again.
+		</h1>
+	);
+
+	keyFull = (
+		<h1 style={{ textAlign: 'center' }}>
+			This group is full!
 			<br/>
 			Please check your link again.
 		</h1>
@@ -196,33 +218,38 @@ class InputPref extends Component {
 							
 							<p className={classes.label}>Price range</p><br />
 							<div className={classes.price_input_wrapper}>
-								<label htmlFor="price1">$</label>
-								<input type="radio" name="price" id="price1" value="1" className={`${classes.price_input} ${classes.checkbox}`} 
-									onChange={this.onInputChange}
-									checked={this.state.price === '1'}
-								/>
-								<span className={`${classes.checkbox_span} ${this.state.price === '1' ? classes.active : ''}`}>
-									<span className={classes.checkbox_check} />
-								</span>
+								<div style={{ width: 60, position: 'relative' }}>
+									<label style={{ transform: 'translateX(-6px)' }} htmlFor="price1">$</label>
+									<input type="radio" name="price" id="price1" value="1" className={`${classes.price_input} ${classes.checkbox}`} 
+										onChange={this.onInputChange}
+										checked={this.state.price === '1'}
+									/>
+									<span className={`${classes.checkbox_span} ${this.state.price === '1' ? classes.active : ''}`}>
+										<span className={classes.checkbox_check} />
+									</span>
+								</div>
 
-								<label htmlFor="price2">$$</label>
-								<input type="radio" name="price" id="price2" value="1, 2" className={`${classes.price_input} ${classes.checkbox}`}
-									onChange={this.onInputChange}
-									checked={this.state.price === '1, 2'}
-								/>
-								<span className={`${classes.checkbox_span} ${this.state.price === '1, 2' ? classes.active : ''}`}>
-									<span className={classes.checkbox_check} />
-								</span>
+								<div style={{ width: 60, position: 'relative' }}>
+									<label style={{ transform: 'translateX(-14px)' }} htmlFor="price2">$$</label>
+									<input type="radio" name="price" id="price2" value="1, 2" className={`${classes.price_input} ${classes.checkbox}`}
+										onChange={this.onInputChange}
+										checked={this.state.price === '1, 2'}
+									/>
+									<span className={`${classes.checkbox_span} ${this.state.price === '1, 2' ? classes.active : ''}`}>
+										<span className={classes.checkbox_check} />
+									</span>
+								</div>
 
-
-								<label htmlFor="price3">$$$</label>
-								<input type="radio" name="price" id="price3" value="1, 2, 3" className={`${classes.price_input} ${classes.checkbox}`} 
-									onChange={this.onInputChange}
-									checked={this.state.price === '1, 2, 3'}
-								/>
-								<span className={`${classes.checkbox_span} ${this.state.price === '1, 2, 3' ? classes.active : ''}`}>
-									<span className={classes.checkbox_check} />
-								</span>
+								<div style={{ width: 60, position: 'relative' }}>
+									<label style={{ transform: 'translateX(-22px)' }} htmlFor="price3">$$$</label>
+									<input type="radio" name="price" id="price3" value="1, 2, 3" className={`${classes.price_input} ${classes.checkbox}`} 
+										onChange={this.onInputChange}
+										checked={this.state.price === '1, 2, 3'}
+									/>
+									<span className={`${classes.checkbox_span} ${this.state.price === '1, 2, 3' ? classes.active : ''}`}>
+										<span className={classes.checkbox_check} />
+									</span>
+								</div>
 							</div>
 							<br />
 							<br />
@@ -264,6 +291,9 @@ class InputPref extends Component {
 		if(this.state.doesKeyExist){
 			if (this.state.finishedInput) {
 				return this.waitingOnOthers;
+			}
+			if (this.state.fullRoom) {
+				return this.keyFull;
 			}
 			return KeyExists;
 		}

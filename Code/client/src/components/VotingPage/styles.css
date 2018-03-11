@@ -1,0 +1,239 @@
+.wrapper {
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.card_wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0 75px 0;
+  overflow: hidden;
+}
+
+.choice {
+  color: #FF8A80;
+  position: relative;
+  margin: auto 90px;
+  font-size: 34px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+  user-select: none;
+  width: 75px;
+}
+.choice svg {
+  fill: #FF8A80;
+}
+.choice:active {
+  transform: translateY(20px) rotate(10deg);
+}
+.choice.no:active {
+  transform: translateY(20px) rotate(-10deg);
+}
+
+.card_item {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 445px;
+  background-color: #FFF;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  font-size: 14px;
+  overflow: hidden;
+  user-select: none;
+  z-index: 1;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 30px)); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.card_item:nth-child(2) {
+  box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
+              box-shadow 0s;
+}
+.card_item.expand {
+  position: absolute;
+  width: 800px;
+  height: 528px;
+  box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+}
+
+.card_title {
+  font-size: 20px;
+}
+
+.expand {
+  position: relative;
+}
+
+.card_img_slide,
+.card_img {
+  background-color: rgba(255, 138, 128, 0.75);
+  position: relative;
+  width: 100%;
+  height: 360px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: pointer;
+}
+.card_item.expand .card_img_slide,
+.card_item.expand .card_img {
+  height: 200px;
+}
+
+.card_img {
+  object-fit: cover;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+.card_img.hide {
+  opacity: 0;
+}
+
+.card_img_slide::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0));
+}
+
+.card_expand {
+  position: absolute;
+  bottom: 55px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-color: #FF8A80;
+  border-radius: 50px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1),
+              bottom 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+.card_item.expand .card_expand {
+  bottom: 300px;
+}
+
+.card_expand:active {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.card_expand::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  background-color: rgba(0,0,0,0);
+  transition: background-color 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+.card_expand:active::after {
+  background-color: rgba(0,0,0,0.2);
+}
+
+.card_expand svg {
+  fill: #FFFAFA;
+  vertical-align: middle;
+  transform: rotate(0deg);
+  transition: transform 0.3s 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.card_item.expand .card_expand svg {
+  transform: rotate(180deg);
+}
+
+.star {
+  fill: #FF8A80;
+  vertical-align: bottom;
+}
+
+.card_hide .star {
+  vertical-align: top;
+}
+
+.card_ratings_wrapper {
+   line-height: 20px;
+   margin-bottom: 2px;
+}
+
+.card_bottom {
+  box-sizing: border-box;
+  padding: 10px 25px 0 25px;
+}
+
+.card_left_aside {
+  display: inline-block;
+  line-height: 24px;
+}
+
+.card_aside {
+  float: right;
+  text-align: right;
+}
+
+.card_category {
+  line-height: 24px;
+}
+
+.card_distance {
+  line-height: 24px;
+}
+
+.card_hide {
+  position: absolute;
+  display: none;
+  opacity: 0;
+  margin-top: 10px;
+  padding-right: 25px;
+}
+.card_hide.expand {
+  display: inherit;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.overlay {
+  background-color: rgba(0,0,0,0.5);
+}
+
+.animation_no {
+  animation: swipeLeft 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+.animation_yes {
+  animation: swipeRight 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@keyframes swipeLeft {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-100vw, -50%) rotate(-60deg);
+  }
+}
+@keyframes swipeRight {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(calc(100vw - 100%), -50%) rotate(60deg);
+  }
+}

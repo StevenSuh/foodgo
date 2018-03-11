@@ -7,6 +7,11 @@
 	background-color: rgba(0,0,0,0.5);
 	z-index: 100;
   animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.hide {
+  opacity: 0;
 }
 
 @keyframes fadeIn {
@@ -16,6 +21,17 @@
   to {
     opacity: 1;
   }
+}
+
+.items_close {
+  position: absolute;
+  top: 17px;
+  right: 19px;
+  cursor: pointer;
+}
+
+.items_close * {
+  pointer-events: none;
 }
 
 .items_wrapper {
@@ -30,7 +46,13 @@
 	text-align: center;
 	padding: 30px 0;
   opacity: 0;
-  animation: fadeIn 0.3s 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+  transform: translateY(10px);
+  animation: fadeInUp 0.3s 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0px); }
 }
 
 .items_title {
@@ -41,11 +63,18 @@
 	width: 500px;
 	position: relative;
 	display: inline-block;
-	top: 10vh;
+	top: 7.5vh;
 	left: 50%;
-	transform: translateX(-50%);
+  opacity: 0; 
+  transform: translateX(-50%) translateY(10px);
+  animation: fadeInUpX 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
 	padding: 30px;
 	border-radius: 10px;
+}
+
+@keyframes fadeInUpX {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0px); }
 }
 
 .label, 
@@ -78,6 +107,7 @@
 	border-style: solid;
 	border-width: 0 0 2px 0;
 	border-color: #FF8A80;
+  box-sizing: border-box;
 }
 
 .text_input_wrapper {
@@ -301,6 +331,13 @@
 
 .price_input_wrapper {
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.price_input_wrapper label {
+  position: absolute;
+  line-height: 24px;
 }
 
 @keyframes rotate {

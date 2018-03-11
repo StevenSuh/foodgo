@@ -20,7 +20,9 @@ class App extends Component {
     	storageBucket: "foodgo-e0ea4.appspot.com",
     	messagingSenderId: "213420997820"
   	};
-  	firebase.initializeApp(config);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(config);
+    }
 	}
   render() {
     return (
