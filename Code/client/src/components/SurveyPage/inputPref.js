@@ -50,21 +50,34 @@ class InputPref extends Component {
 			// firebase syntax
 			this.props.db.database().ref('numPeople').once("value", snapshot => {
 				const key = snapshot.hasChild(id);
-
+				//Check to see if room exists.
 				if (key) {
+					//If room exists check make sure max occupancy not violated
 					const value = snapshot.child(id).val();
 					
 					if (value.inputs === value.numPeople) {
 						if (localStorage.getItem(`foodgo_input_${id}`)) {
 							return this.props.history.push(`/${id}/vote`);
 						} else {
-							return this.setState({ ...this.state, location: newLocation, fullRoom: true, initialized: true, doesKeyExist: key, finishedInput: false });
+							return this.setState({ ...this.state, 
+																		 location: newLocation,
+																		 fullRoom: true,
+																		 initialized: true, 
+																		 doesKeyExist: key, 
+																		 finishedInput: false });
 						}
 					}
 
-					return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: false });
+					return this.setState({ ...this.state,
+																 location: newLocation,
+																 initialized: true,
+																 doesKeyExist: key,
+																 finishedInput: false });
 				}
-				this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key });
+				this.setState({ ...this.state,
+											  location: newLocation,
+											  initialized: true,
+											  doesKeyExist: key });
 			});
 		// }, err => {
 			// console.log(err);
@@ -102,6 +115,7 @@ class InputPref extends Component {
 
 	onSubmitData(data) {
 		const id = this.props.idKey;
+		//change variable to roomData
 		const db = this.props.db.database().ref(`numPeople/${id}`);
 
 		db.once('value', async snapshot => {
@@ -109,6 +123,7 @@ class InputPref extends Component {
 			const value = snapshot.val();
 
 			if (value.inputs < value.numPeople) {
+				//clones value
 				const newData = { ...value };
 				newData.inputs += 1;
 
