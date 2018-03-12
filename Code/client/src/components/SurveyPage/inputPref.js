@@ -131,10 +131,10 @@ class InputPref extends Component {
 					newData.restaurants = [];
 				}
 				response = await axios.get(`${url}api/detail/?id=${data[0].props.compData.id}`);
-				newData.restaurants.push(Object.assign(data[0].props.compData, response.data));
+				newData.restaurants.push(Object.assign(data[0].props.compData, response.data, { totVotes: 0 }));
 				
 				response = await axios.get(`${url}api/detail/?id=${data[1].props.compData.id}`);
-				newData.restaurants.push(Object.assign(data[1].props.compData, response.data));
+				newData.restaurants.push(Object.assign(data[1].props.compData, response.data, { totVotes: 0 }));
 
 				db.update(newData, error => {
 					// set this browser to valid browser
