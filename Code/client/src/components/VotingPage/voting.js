@@ -13,7 +13,8 @@ class Voting extends Component {
       length: 0, 
       cards: [], 
       initialized: false, 
-      vote: [] 
+      vote: [],
+      restVotes: [], 
     };
 
     this.onChoiceClick = this.onChoiceClick.bind(this);
@@ -42,7 +43,11 @@ class Voting extends Component {
       const value = snapshot.val();
       const newData = { ...value };
       newData.votes += 1;
-
+      for(var i = 0; i<this.state.restVotes.length; i++){
+        if (this.state.restVotes[i] === 1) {
+          newData.restaurants[i].totVotes++;
+        }
+      }
       db.update(newData, error => {
         // set this browser to valid browser
         localStorage.setItem(`foodgo_vote_${id}`, 1);
@@ -63,45 +68,54 @@ class Voting extends Component {
   }
 
   onChoiceClick(event) {
+    //yes or no
     const value = event.currentTarget.getAttribute('value');
 
     const cards = document.getElementsByClassName(classes.card_item);
-    const lastCard = cards[cards.length-1];
-    lastCard.classList.add(classes[`animation_${value}`]);
+    const topCard = cards[cards.length-1];
+    topCard.classList.add(classes[`animation_${value}`]);
 
-    const index = lastCard.getAttribute('index');
+    const index = topCard.getAttribute('index');
     const state = { ...this.state };
+    //copies votes and adds new vote
     const newVote = state.vote.concat({ data: state.cards[index], vote: value });
+    //copies cards
     const newCards = state.cards.slice();
-    newCards.shift();
+    newCards.pop();
+    const restVotes = state.restVotes.slice();
+    if (value === "yes") {
+      restVotes[index] = 1;
+    } else {
+      restVotes[index] = 0;
+    }
 
-    setTimeout((lastCard, state, newCards, newVote, index) => {
-      lastCard.classList.remove(classes[`animation_${value}`]);
-
-      this.setState({ ...state, cards: newCards, vote: newVote, index: index+1 });
+    setTimeout((state, newCards, newVote, index, restVotes) => {
+      this.setState({ ...state, cards: newCards, vote: newVote, index: index+1, restVotes: restVotes});
 
       if (newVote.length === this.state.length) {
         this.doneVoting(newVote);
       }
-    }, 275, lastCard, state, newCards, newVote, index);
+    }, 275, state, newCards, newVote, index, restVotes);
   }
 
   render() {
+    console.log(this);
     if (!this.state.initialized) {
       return '';
     }
 
     const cardList = [];
     cardList.push(<div style={{ position: 'relative', opacity: 0 }} className={classes.card_item} key={-1} />);
-    for (let i = this.state.cards.length-1; i >= 0; i--) {
+    for (let i = 0; i < this.state.cards.length; i++) {
       cardList.push(<Card compData={this.state.cards[i]} index={i} key={i} />);
     }
 
     return (
       <div className={classes.wrapper}>
-        <h1 style={{ textAlign: 'center', margin: 0, marginTop: '20px' }}>Swipe to vote.</h1>
+        <h1 style={{ textAlign: 'center', margin: 0, paddingTop: '20px' }}>Swipe to vote.</h1>
         <div className={classes.card_wrapper}>
           <span className={`${classes.choice} ${classes.no}`}
+            id="choice_no"
             onClick={this.onChoiceClick}
             value="no"
           >
@@ -115,6 +129,7 @@ class Voting extends Component {
             {cardList}
           </span>
           <span className={classes.choice}
+            id="choice_yes"
             onClick={this.onChoiceClick}
             value="yes"
           >

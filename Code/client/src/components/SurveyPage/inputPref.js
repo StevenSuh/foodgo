@@ -137,20 +137,20 @@ class InputPref extends Component {
 				if (!newData.restaurants) {
 					newData.restaurants = [];
 					response = await axios.get(`${url}api/detail/?id=${restaurant1.id}`);
-					newData.restaurants.push(Object.assign(restaurant1, response.data));
+					newData.restaurants.push(Object.assign(restaurant1, response.data, { totVotes: 0 }));
 				
 					response = await axios.get(`${url}api/detail/?id=${restaurant2.id}`);
-					newData.restaurants.push(Object.assign(restaurant2, response.data));
+					newData.restaurants.push(Object.assign(restaurant2, response.data, { totVotes: 0 }));
 				} else {
 
 					if (!newData.restaurants.find(el => el.id === restaurant1.id)) {
 						response = await axios.get(`${url}api/detail/?id=${restaurant1.id}`);
-						newData.restaurants.push(Object.assign(restaurant1, response.data));
+						newData.restaurants.push(Object.assign(restaurant1, response.data, { totVotes: 0 }));
 					}
 
 					if (!newData.restaurants.find(el => el.id === restaurant2.id)) {
 						response = await axios.get(`${url}api/detail/?id=${restaurant2.id}`);
-						newData.restaurants.push(Object.assign(restaurant2, response.data));
+						newData.restaurants.push(Object.assign(restaurant2, response.data, { totVotes: 0 }));
 					}
 				}
 

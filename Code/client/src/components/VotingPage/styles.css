@@ -1,12 +1,13 @@
 .wrapper {
   animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  min-height: calc(100vh - 60px);
+  overflow: hidden;
 }
 
 .card_wrapper {
   display: flex;
   justify-content: center;
-  padding: 40px 0 75px 0;
-  overflow: hidden;
+  padding-top: 40px;
 }
 
 .choice {
@@ -35,9 +36,8 @@
 .card_item {
   display: inline-block;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: calc(50% - 222.5px);
+  left: calc(50% - 200px);
   width: 400px;
   height: 445px;
   background-color: #FFF;
@@ -47,6 +47,11 @@
   overflow: hidden;
   user-select: none;
   z-index: 1;
+}
+.card_item.drag {
+  box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
+              transform 0.1s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 @keyframes fadeInUp {
@@ -61,6 +66,8 @@
 }
 .card_item.expand {
   position: absolute;
+  top: calc(50% - 264px);
+  left: calc(50% - 400px);
   width: 800px;
   height: 528px;
   box-shadow: 0 10px 50px rgba(0,0,0,0.2);
@@ -220,20 +227,20 @@
 .animation_yes {
   animation: swipeRight 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
+[animation="swipe_no"] {
+  animation: swipeLeft 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+[animation="swipe_yes"] {
+  animation: swipeRight 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
 
 @keyframes swipeLeft {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
   to {
-    transform: translate(-100vw, -50%) rotate(-60deg);
+    transform: translate(-250%, 0) rotate(-45deg);
   }
 }
 @keyframes swipeRight {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
   to {
-    transform: translate(calc(100vw - 100%), -50%) rotate(60deg);
+    transform: translate(250%, 0) rotate(45deg);
   }
 }
