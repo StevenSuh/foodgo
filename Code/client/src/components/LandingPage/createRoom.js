@@ -25,16 +25,24 @@ class CreateRoom extends Component {
   // when createRoom is clicked
   onButtonClick(event) {
     event.preventDefault();
-    if (this.state.term) {
-      let dbCon = this.props.db.database().ref('/numPeople');
-      const dbConRef = dbCon.push({
-        numPeople: parseInt(this.state.term, 10),
-        votes: 0,
-        inputs: 0
-      });
+    if (!this.state.showPopUp) {
+      if (this.state.term) {
+        let dbCon = this.props.db.database().ref('/numPeople');
+        const dbConRef = dbCon.push({
+          numPeople: parseInt(this.state.term, 10),
+          votes: 0,
+          inputs: 0
+        });
 
-      // display popup
-      this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
+        // display popup
+        this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
+      }
+    } else {
+      const goToRoom = document.getElementById('go_to_room');
+
+      if (goToRoom) {
+        goToRoom.click();
+      }
     }
   }
 

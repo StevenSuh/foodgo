@@ -20,9 +20,8 @@ export default (props) => {
   }
 
   const onOverlayClick = (event) => {
-    document.getElementById('room_overlay').classList.add(classes.hide);
-
     if (event.target === event.currentTarget) {
+      document.getElementById('room_overlay').classList.add(classes.hide);
       setTimeout(props.onCompClick, 300);
     }
   }
@@ -53,6 +52,7 @@ export default (props) => {
             href={`/${props.compKey}`}
             onClick={onRedirect}  
             className={classes.room_modal_button}
+            id="go_to_room"
           >
             Go to Room
           </a>

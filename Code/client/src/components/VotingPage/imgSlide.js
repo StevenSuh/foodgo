@@ -14,8 +14,10 @@ class ImgSlide extends Component {
   onImgSwap() {
     this.img.classList.add(classes.hide);
     setTimeout(() => {
-      this.img.classList.remove(classes.hide);
-      this.setState({ ...this.state, index: (this.state.index+1) % this.props.compPhotos.length });
+      if (this.img) {
+        this.img.classList.remove(classes.hide);
+        this.setState({ ...this.state, index: (this.state.index+1) % this.props.compPhotos.length });
+      }
     }, 300);
   }
 

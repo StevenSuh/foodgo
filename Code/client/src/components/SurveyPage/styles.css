@@ -360,15 +360,27 @@
   }
 }
 
-@media (max-width: 375px){
+@media (max-width: 400px){
   .inputPref_box {
     width: 90%;
     box-shadow: none;
     padding: 0;
+    padding-bottom: 25px;
+    top: 4vh;
   }
 
   .room_modal {
     width: 90%;
+  }
+
+  .restaurant_wrapper {
+    height: 355px;
+  }
+
+  .restaurant_item_wrapper * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .restaurant_aside {
@@ -385,5 +397,10 @@
 
   .items_wrapper {
     width: 90%;
+    top: calc(60px + 2.5%);
+  }
+
+  .showbox {
+    width: 100%;
   }
 }
