@@ -1,14 +1,14 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import Voting from './voting';
 import Header from '../header';
+import Result from './result'
 
-const VotingPage = (props) => {
+const ResultPage = (props) => {
   return (
     <div>
       <Header/>
-      <Voting
+      <Result
         db={props.db}
         idKey={props.match.params.id}
       />
@@ -16,4 +16,4 @@ const VotingPage = (props) => {
   );
 }
 
-export default withRouter(VotingPage);
+export default withRouter(ResultPage);
