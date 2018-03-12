@@ -112,9 +112,10 @@ class Voting extends Component {
 
     return (
       <div className={classes.wrapper}>
-        <h1 style={{ textAlign: 'center', margin: 0, marginTop: '20px' }}>Swipe to vote.</h1>
+        <h1 style={{ textAlign: 'center', margin: 0, paddingTop: '20px' }}>Swipe to vote.</h1>
         <div className={classes.card_wrapper}>
           <span className={`${classes.choice} ${classes.no}`}
+            id="choice_no"
             onClick={this.onChoiceClick}
             value="no"
           >
@@ -128,6 +129,7 @@ class Voting extends Component {
             {cardList}
           </span>
           <span className={classes.choice}
+            id="choice_yes"
             onClick={this.onChoiceClick}
             value="yes"
           >
