@@ -33,7 +33,7 @@ export default (props) => {
         <div className={classes.room_modal_wrapper}>
           <h4>Successfully created a room!</h4>
 
-          <span>
+          <span className={classes.copy_link}>
             <span 
               className={classes.room_modal_copyIcon}
               onClick={onCopyClick}

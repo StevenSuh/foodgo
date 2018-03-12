@@ -59,10 +59,6 @@ class Card extends Component {
         card.setAttribute('animation', 'swipe_yes');
         document.getElementById('choice_yes').click();
       }
-      return setTimeout((card) => {
-        card.removeAttribute('animation');
-        this.setState({ position: { x: 0, y: 0 } });
-      }, 275, card);
     } else {
       this.setState({ ...this.state, position: { x: 0, y: 0 } });
     }

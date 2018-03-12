@@ -18,7 +18,7 @@
   from {
     opacity: 0;
   }
-  to {
+  to { 
     opacity: 1;
   }
 }
@@ -360,3 +360,30 @@
   }
 }
 
+@media (max-width: 375px){
+  .inputPref_box {
+    width: 90%;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .room_modal {
+    width: 90%;
+  }
+
+  .restaurant_aside {
+    display: none;
+  }
+
+  .restaurant_main {
+    max-width: 75%;
+  }
+
+  .input_form {
+    width: 100%
+  }
+
+  .items_wrapper {
+    width: 90%;
+  }
+}
