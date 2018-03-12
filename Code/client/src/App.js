@@ -7,6 +7,7 @@ import { hot } from 'react-hot-loader';
 import LandingPage from './components/LandingPage';
 import SurveyPage from './components/SurveyPage';
 import VotingPage from './components/VotingPage';
+import ResultPage from './components/ResultPage';
 
 class App extends Component {
 
@@ -30,6 +31,7 @@ class App extends Component {
         <Route path='/' exact component={() => <LandingPage db = {firebase}/>}/>
         <Route path='/:id' exact component={() => <SurveyPage db = {firebase}/>}/>
         <Route path='/:id/vote' exact component={() => <VotingPage db = {firebase}/>}/>
+        <Route path='/:id/result' exact component={() => <ResultPage db = {firebase}/>}/>
       </Switch>
     );
   }

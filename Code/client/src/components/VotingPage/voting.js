@@ -57,7 +57,7 @@ class Voting extends Component {
           const updatedData = dataSnapshot.val();
           console.log('updated:', updatedData);
           if (updatedData.votes === updatedData.numPeople) {
-            this.props.history.push(`/${id}/go`);
+            this.props.history.push(`/${id}/result`);
             db.off('value');
           }
         });
