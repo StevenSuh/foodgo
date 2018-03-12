@@ -85,9 +85,8 @@ class InputPref extends Component {
 			});
 		// }, err => {
 			// console.log(err);
+			// this.setState({ ...this.state, initialized: true });
 		// });
-
-		// this.setState({ ...this.state, initialized: true });
 	}
 
 	onSubmitClick(event) {
@@ -153,7 +152,6 @@ class InputPref extends Component {
 						newData.restaurants.push(Object.assign(restaurant2, response.data, { totVotes: 0 }));
 					}
 				}
-
 				db.update(newData, error => {
 					// set this browser to valid browser
 					localStorage.setItem(`foodgo_input_${id}`, 1);

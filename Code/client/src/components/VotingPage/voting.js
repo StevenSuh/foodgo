@@ -23,15 +23,27 @@ class Voting extends Component {
 
   componentDidMount() {
     const id = this.props.idKey;
-    const db = this.props.db.database().ref(`numPeople/${id}`);
+    const db = this.props.db.database().ref(`numPeople`);
 
     db.once('value', snapshot => {
-      const value = snapshot.val();
+      const key = snapshot.hasChild(id);
+      if (key) {
+        const value = snapshot.child(id).val();
 
-      if (value.votes >= value.numPeople) {
-        return this.props.history.push(`/${id}/go`);
+        if (value.votes >= value.numPeople) {
+          return this.props.history.push(`/${id}/result`);
+        }
+
+        if (value.inputs < value.numPeople) {
+          if (!localStorage.getItem(`foodgo_input_${id}`)) {
+            return this.props.history.push(`/${id}`);
+          }
+        }
+
+        this.setState({ ...this.state, length: value.restaurants.length, cards: value.restaurants, initialized: true });        
+      } else {
+        this.props.history.push('/');
       }
-      this.setState({ ...this.state, length: value.restaurants.length, cards: value.restaurants, initialized: true });
     });
   }
 
@@ -43,6 +55,10 @@ class Voting extends Component {
       const value = snapshot.val();
       const newData = { ...value };
       newData.votes += 1;
+      if (newData.votes === newData.numPeople) {
+        newData.seenResult = 0;
+      }
+
       for(var i = 0; i<this.state.restVotes.length; i++){
         if (this.state.restVotes[i] === 1) {
           newData.restaurants[i].totVotes++;
@@ -62,7 +78,7 @@ class Voting extends Component {
           }
         });
         
-        this.setState({ ...this.state, showOutput: false, finishedInput: true });
+        this.setState({ ...this.state, showOutput: false, finishedVote: true });
       });
     })
   }
@@ -98,10 +114,31 @@ class Voting extends Component {
     }, 275, state, newCards, newVote, index, restVotes);
   }
 
+  waitingOnOthers = (
+    <div>
+      <h1 style={{ textAlign: 'center', margin: '1em' }}>
+        Thanks for your vote.
+      </h1>
+      <h3 style={{ textAlign: 'center' }}>
+        Waiting on others       
+      </h3>
+      <br/>
+      <div className={classes.loading}>
+        <svg className={classes.circular} viewBox="25 25 50 50">
+          <circle className={classes.path} cx="50" cy="50" r="20" fill="none" strokeWidth="3" strokeMiterlimit="10"/>
+        </svg>
+      </div>
+    </div>
+  )
+
   render() {
     console.log(this);
     if (!this.state.initialized) {
       return '';
+    }
+
+    if (this.state.finishedVote) {
+      return this.waitingOnOthers;
     }
 
     const cardList = [];
@@ -112,7 +149,7 @@ class Voting extends Component {
 
     return (
       <div className={classes.wrapper}>
-        <h1 style={{ textAlign: 'center', margin: 0, paddingTop: '20px' }}>Swipe to vote.</h1>
+        <h1 className={classes.wrapper_title} style={{ textAlign: 'center', margin: 0, paddingTop: '20px' }}>Swipe to vote.</h1>
         <div className={classes.card_wrapper}>
           <span className={`${classes.choice} ${classes.no}`}
             id="choice_no"

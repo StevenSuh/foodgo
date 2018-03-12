@@ -1,21 +1,9 @@
 import React, { Component } from 'react';
-import Draggable from 'react-draggable';
-import ImgSlide from './imgSlide';
+import ImgSlide from '../VotingPage/imgSlide';
 
-import classes from './styles.css';
+import classes from '../VotingPage/styles.css';
 
 class Card extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { expand: false, position: { x: 0, y: 0 } };
-
-    this.expandCard = this.expandCard.bind(this);
-
-    this.dragStop = this.dragStop.bind(this);
-    this.dragControlled = this.dragControlled.bind(this);
-  }
-
   renderFullstar = (
     <svg className={classes.star} width="20" height="20" viewBox="0 0 20 20">
       <path d="M 10 15.5049L 16.18 19.2923L 14.54 12.1542L 20 7.35138L 12.81 6.72185L 10 0L 7.19 6.72185L 0 7.35138L 5.45 12.1542L 3.82 19.2923L 10 15.5049Z"/>
@@ -34,48 +22,8 @@ class Card extends Component {
     </svg>
   );
 
-  arrow = (
-    <svg width="30" height="19" viewBox="0 0 30 19">
-      <path d="M 3.525 18.525L 15 7.075L 26.475 18.525L 30 15L 15 0L 0 15L 3.525 18.525Z"/>
-    </svg>
-  );
-
-  expandCard(event) {
-    this.setState({ ...this.state, expand: !this.state.expand });
-  }
-
-  dragStart() {
-  }
-
-  dragStop(e) {
-    // e.currentTarget.classList.remove(classes.drag);
-    const { x } = this.state.position;
-    const card = this.card;
-    if (Math.abs(x) >= card.clientWidth*0.66) {
-      if (x < 0) {
-        card.setAttribute('animation', 'swipe_no');
-        document.getElementById('choice_no').click();
-      } else {
-        card.setAttribute('animation', 'swipe_yes');
-        document.getElementById('choice_yes').click();
-      }
-    } else {
-      this.setState({ ...this.state, position: { x: 0, y: 0 } });
-    }
-  }
-
-  dragControlled(e, position) {
-    const { x, y } = this.state.position;
-    this.setState({ 
-      ...this.state, 
-      position: {
-        x: x + position.deltaX,
-        y: y + position.deltaY
-      } 
-    });
-  }
-
   render() {
+    console.log(this);
     const data = this.props.compData;
 
     const stars = [];
@@ -108,11 +56,14 @@ class Card extends Component {
     }
 
     return (
-      <Draggable position={this.state.position} onStart={this.dragStart} onStop={this.dragStop} onDrag={this.dragControlled}>
-        <div ref={input => {this.card = input}} index={this.props.index} className={`${classes.card_item} ${this.state.expand ? classes.expand : ''}`}>
+      <div>
+        <h1 style={{ textAlign: 'center', margin: 0, paddingTop: '20px' }}>
+          Let's go eat now!
+        </h1>
+        <div index={this.props.index} className={`${classes.card_item} ${classes.result_card_item}`}>
           <ImgSlide compPhotos={data.photos} />
 
-          <div className={classes.card_bottom}>
+          <div className={`${classes.card_bottom} ${classes.result_card_bottom}`}>
             <h2 className={classes.card_title}>
               {data.name}
             </h2>
@@ -124,7 +75,7 @@ class Card extends Component {
               </span>  
             </div>
 
-            <div className={`${classes.card_hide} ${this.state.expand ? classes.expand : ''}`}>
+            <div>
               <div className={classes.card_left_aside}>
                 {data.location.display_address.join(', ')}
               </div>
@@ -136,17 +87,17 @@ class Card extends Component {
               <p className={classes.card_location}>
                 {Math.round(data.distance/1609.34)} mi
               </p>
-              {reviews}
             </div>
           </div>
 
-          <button className={classes.card_expand}
-            onClick={this.expandCard}
+          <a href={data.url}
+            className={classes.result_view_button}
+            target="_blank"
           >
-            {this.arrow}
-          </button>
+            View on <span><img className={classes.result_yelp} src="/Yelp_trademark_RGB.png" alt="Yelp" /></span>
+          </a>
         </div>
-      </Draggable>
+      </div>
     );
   }
 }

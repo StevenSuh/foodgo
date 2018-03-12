@@ -17,3 +17,9 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+@media (max-width: 400px) {
+  .header {
+    padding: 10px 0 5px 5%;
+  } 
+}
