@@ -50,7 +50,7 @@ export default (props) => {
           </span>
 
           <a
-            href={`/${props.fcompKey}`}
+            href={`/${props.compKey}`}
             onClick={onRedirect}  
             className={classes.room_modal_button}
           >
