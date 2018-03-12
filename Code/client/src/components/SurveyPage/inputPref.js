@@ -50,15 +50,21 @@ class InputPref extends Component {
 			// firebase syntax
 			this.props.db.database().ref('numPeople').once("value", snapshot => {
 				const key = snapshot.hasChild(id);
-
+				//Check to see if room exists.
 				if (key) {
+					//If room exists check make sure max occupancy not violated
 					const value = snapshot.child(id).val();
 					
 					if (value.inputs === value.numPeople) {
 						if (localStorage.getItem(`foodgo_input_${id}`)) {
 							return this.props.history.push(`/${id}/vote`);
 						} else {
-							return this.setState({ ...this.state, location: newLocation, fullRoom: true, initialized: true, doesKeyExist: key, finishedInput: false });
+							return this.setState({ ...this.state, 
+																		 location: newLocation,
+																		 fullRoom: true,
+																		 initialized: true, 
+																		 doesKeyExist: key, 
+																		 finishedInput: false });
 						}
 					} else {
 						if (localStorage.getItem(`foodgo_input_${id}`)) {
@@ -66,9 +72,16 @@ class InputPref extends Component {
 						}
 					}
 
-					return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: false });
+					return this.setState({ ...this.state,
+																 location: newLocation,
+																 initialized: true,
+																 doesKeyExist: key,
+																 finishedInput: false });
 				}
-				this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key });
+				this.setState({ ...this.state,
+											  location: newLocation,
+											  initialized: true,
+											  doesKeyExist: key });
 			});
 		// }, err => {
 			// console.log(err);
@@ -106,6 +119,7 @@ class InputPref extends Component {
 
 	onSubmitData(data) {
 		const id = this.props.idKey;
+		//change variable to roomData
 		const db = this.props.db.database().ref(`numPeople/${id}`);
 
 		const restaurant1 = data[0].props.compData;
@@ -116,26 +130,27 @@ class InputPref extends Component {
 			const value = snapshot.val();
 
 			if (value.inputs < value.numPeople) {
+				//clones value
 				const newData = { ...value };
 				newData.inputs += 1;
 
 				if (!newData.restaurants) {
 					newData.restaurants = [];
 					response = await axios.get(`${url}api/detail/?id=${restaurant1.id}`);
-					newData.restaurants.push(Object.assign(restaurant1, response.data));
+					newData.restaurants.push(Object.assign(restaurant1, response.data, { totVotes: 0 }));
 				
 					response = await axios.get(`${url}api/detail/?id=${restaurant2.id}`);
-					newData.restaurants.push(Object.assign(restaurant2, response.data));
+					newData.restaurants.push(Object.assign(restaurant2, response.data, { totVotes: 0 }));
 				} else {
 
 					if (!newData.restaurants.find(el => el.id === restaurant1.id)) {
 						response = await axios.get(`${url}api/detail/?id=${restaurant1.id}`);
-						newData.restaurants.push(Object.assign(restaurant1, response.data));
+						newData.restaurants.push(Object.assign(restaurant1, response.data, { totVotes: 0 }));
 					}
 
 					if (!newData.restaurants.find(el => el.id === restaurant2.id)) {
 						response = await axios.get(`${url}api/detail/?id=${restaurant2.id}`);
-						newData.restaurants.push(Object.assign(restaurant2, response.data));
+						newData.restaurants.push(Object.assign(restaurant2, response.data, { totVotes: 0 }));
 					}
 				}
 
