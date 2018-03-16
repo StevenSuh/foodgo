@@ -20,7 +20,7 @@ class InputPref extends Component {
 	constructor(props){
 		super(props);
 
-		this.state = { 
+		this.state = {
 			doesKeyExist: false,
 			categories: '',
 			price: '',
@@ -57,32 +57,34 @@ class InputPref extends Component {
 			if (key) {
 				//If room exists check make sure max occupancy not violated
 				const value = snapshot.child(id).val();
-				
+
 				if (value.inputs === value.numPeople) {
 					if (localStorage.getItem(`foodgo_input_${id}`)) {
 						return this.props.history.push(`/${id}/vote`);
 					} else {
-						return this.setState({ ...this.state, 
-																	 location: newLocation,
+						return this.setState({ ...this.state,
 																	 fullRoom: true,
-																	 initialized: true, 
-																	 doesKeyExist: key, 
+																	 initialized: true,
+																	 doesKeyExist: key,
 																	 finishedInput: false });
 					}
 				} else {
 					if (localStorage.getItem(`foodgo_input_${id}`)) {
-						return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: true });
+						return this.setState({ 
+							...this.state, 
+							initialized: true, 
+							doesKeyExist: key, 
+							finishedInput: true 
+						});
 					}
 				}
 
 				return this.setState({ ...this.state,
-															 location: newLocation,
 															 initialized: true,
 															 doesKeyExist: key,
 															 finishedInput: false });
 			}
 			this.setState({ ...this.state,
-										  location: newLocation,
 										  initialized: true,
 										  doesKeyExist: key });
 		});
@@ -136,7 +138,7 @@ class InputPref extends Component {
 					newData.restaurants = [];
 					response = await axios.get(`${url}api/detail/?id=${restaurant1.id}`);
 					newData.restaurants.push(Object.assign(restaurant1, response.data, { totVotes: 0 }));
-				
+
 					response = await axios.get(`${url}api/detail/?id=${restaurant2.id}`);
 					newData.restaurants.push(Object.assign(restaurant2, response.data, { totVotes: 0 }));
 				} else {
@@ -154,7 +156,7 @@ class InputPref extends Component {
 				db.update(newData, error => {
 					// set this browser to valid browser
 					localStorage.setItem(`foodgo_input_${id}`, 1);
-					
+
 					// on value change
 					db.on('value', dataSnapshot => {
 						const updatedData = dataSnapshot.val();
@@ -164,7 +166,7 @@ class InputPref extends Component {
 							db.off('value');
 						}
 					});
-					
+
 					this.setState({ ...this.state, showOutput: false, finishedInput: true });
 				});
 			}
@@ -179,12 +181,12 @@ class InputPref extends Component {
 			delete data.location;
 
       ReactDOM.render(
-        <OutputList 
+        <OutputList
         	compData={data}
         	compLocation={this.state.location}
         	compClose={this.onOutputClose}
         	compSubmit={this.onSubmitData}
-        />, 
+        />,
         document.getElementById('modal')
       );
     } else {
@@ -214,7 +216,7 @@ class InputPref extends Component {
 				Thanks for your input.
 			</h1>
 			<h3 style={{ textAlign: 'center' }}>
-				Waiting on others				
+				Waiting on others
 			</h3>
 			<br/>
 	    <div className={classes.loading}>
@@ -240,18 +242,18 @@ class InputPref extends Component {
 						<form className={classes.input_form}>
 							<label className={classes.label} htmlFor="genre">Search Term</label><br />
 							<div className={classes.text_input_wrapper}>
-								<input type="text" name="categories" className={classes.text_input} id="genre" placeholder="Ex: American, Chinese, Italian ..." 
+								<input type="text" name="categories" className={classes.text_input} id="genre" placeholder="Ex: American, Chinese, Italian ..."
 									value={this.state.categories}
 									onChange={this.onInputChange}
 								/>
 							</div>
 							<br />
-							
+
 							<p className={classes.label}>Price range</p><br />
 							<div className={classes.price_input_wrapper}>
 								<div style={{ width: 60, position: 'relative' }}>
 									<label style={{ transform: 'translateX(-6px)' }} htmlFor="price1">$</label>
-									<input type="radio" name="price" id="price1" value="1" className={`${classes.price_input} ${classes.checkbox}`} 
+									<input type="radio" name="price" id="price1" value="1" className={`${classes.price_input} ${classes.checkbox}`}
 										onChange={this.onInputChange}
 										checked={this.state.price === '1'}
 									/>
@@ -273,7 +275,7 @@ class InputPref extends Component {
 
 								<div style={{ width: 60, position: 'relative' }}>
 									<label style={{ transform: 'translateX(-22px)' }} htmlFor="price3">$$$</label>
-									<input type="radio" name="price" id="price3" value="1, 2, 3" className={`${classes.price_input} ${classes.checkbox}`} 
+									<input type="radio" name="price" id="price3" value="1, 2, 3" className={`${classes.price_input} ${classes.checkbox}`}
 										onChange={this.onInputChange}
 										checked={this.state.price === '1, 2, 3'}
 									/>
@@ -288,9 +290,9 @@ class InputPref extends Component {
 							<label htmlFor="distance" className={`${classes.distance} ${classes.label}`}>Distance</label>
 							<div style={{ width: '100%', margin: '0 0 40px 0' }} className={classes.slider_input_wrapper}>
 								<p className={classes.p} style={{ margin: '10px 0 10px 0', padding: 0, paddingLeft: 10 }}>{this.state.radius} mi</p>
-								<Slider name="radius" id="radius" min={1} max={25} 
-									value={this.state.radius} 
-									onChange={this.onInputChange} 
+								<Slider name="radius" id="radius" min={1} max={25}
+									value={this.state.radius}
+									onChange={this.onInputChange}
 									railStyle={{ height: 6 }}
 									dotStyle={{ backgroundColor: 'rgba(0,0,0,0)', borderColor: 'rgba(0,0,0,0)' }}
 									activeDotStyle={{ backgroundColor: 'rgba(0,0,0,0)', borderColor: 'rgba(0,0,0,0)' }}
@@ -305,8 +307,8 @@ class InputPref extends Component {
 									}}
 								/>
 							</div>
-							<button 
-								className={classes.submit} 
+							<button
+								className={classes.submit}
 								onClick={this.onSubmitClick}
 							>
 								Submit
