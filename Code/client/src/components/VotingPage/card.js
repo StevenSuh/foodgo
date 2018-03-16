@@ -8,7 +8,8 @@ class Card extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { expand: false, position: { x: 0, y: 0 } };
+    const limit = (window.innerWidth > 500) ? 2/3 : 1/2;
+    this.state = { expand: false, position: { x: 0, y: 0 }, limit: limit };
 
     this.expandCard = this.expandCard.bind(this);
 
@@ -51,7 +52,7 @@ class Card extends Component {
     // e.currentTarget.classList.remove(classes.drag);
     const { x } = this.state.position;
     const card = this.card;
-    if (Math.abs(x) >= card.clientWidth*0.66) {
+    if (Math.abs(x) >= card.clientWidth*this.state.limit) {
       if (x < 0) {
         card.setAttribute('animation', 'swipe_no');
         document.getElementById('choice_no').click();

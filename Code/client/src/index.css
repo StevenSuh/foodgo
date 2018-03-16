@@ -1,8 +1,21 @@
+html, 
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+}
+
+#root {
+  width: 100vw;
+  height: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
   font-family: 'Poppins', sans-serif;
   color: #4A4A4A;
   background-color: #FFFAFA;
@@ -43,4 +56,17 @@ section * {
   box-shadow: 0 10px 50px rgba(0,0,0,0.2);
   transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
               transform 0s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+}
+
+@media (max-width: 500px) {
+  input,
+  select:focus {
+    font-size: 16px !important;
+  }
+
+  .rc-slider-handle {
+    width: 20px !important;
+    height: 20px !important;
+    margin-top: -7px !important;
+  }
 }

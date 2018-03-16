@@ -44,18 +44,19 @@ export default (props) => {
             <a href={`/${props.compKey}`}
               onClick={onRedirect}
             >
-              {window.location.host}/{props.compKey}
+              https://{window.location.host}/{props.compKey}
             </a>
           </span>
-
-          <a
-            href={`/${props.compKey}`}
-            onClick={onRedirect}  
-            className={classes.room_modal_button}
-            id="go_to_room"
-          >
-            Go to Room
-          </a>
+          <div>
+            <a
+              href={`/${props.compKey}`}
+              onClick={onRedirect}  
+              className={classes.room_modal_button}
+              id="go_to_room"
+            >
+              Go to Room
+            </a>
+          </div>
         </div>
       </div>
     </div>
