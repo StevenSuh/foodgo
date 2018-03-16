@@ -25,7 +25,7 @@ class InputPref extends Component {
 			categories: '',
 			price: '',
 			radius: 1,
-			location: '',
+			location: { lat: 37, lng: -122 },
 			showOutput: false,
 			finishedInput: false,
 			initialized: false,
@@ -44,83 +44,47 @@ class InputPref extends Component {
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(position => {
 			const newLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-
-			const id = this.props.idKey;
-			// firebase syntax
-			this.props.db.database().ref('numPeople').once("value", snapshot => {
-				const key = snapshot.hasChild(id);
-				//Check to see if room exists.
-				if (key) {
-					//If room exists check make sure max occupancy not violated
-					const value = snapshot.child(id).val();
-					
-					if (value.inputs === value.numPeople) {
-						if (localStorage.getItem(`foodgo_input_${id}`)) {
-							return this.props.history.push(`/${id}/vote`);
-						} else {
-							return this.setState({ ...this.state, 
-																		 location: newLocation,
-																		 fullRoom: true,
-																		 initialized: true, 
-																		 doesKeyExist: key, 
-																		 finishedInput: false });
-						}
-					} else {
-						if (localStorage.getItem(`foodgo_input_${id}`)) {
-							return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: true });
-						}
-					}
-
-					return this.setState({ ...this.state,
-																 location: newLocation,
-																 initialized: true,
-																 doesKeyExist: key,
-																 finishedInput: false });
-				}
-				this.setState({ ...this.state,
-											  location: newLocation,
-											  initialized: true,
-											  doesKeyExist: key });
-			});
+			this.setState({ ...this.state, location: newLocation });
 		}, err => {
-			const newLocation = { lat: 37, lng: -122 };
+			console.log(err);
+		});
 
-			const id = this.props.idKey;
-			// firebase syntax
-			this.props.db.database().ref('numPeople').once("value", snapshot => {
-				const key = snapshot.hasChild(id);
-				//Check to see if room exists.
-				if (key) {
-					//If room exists check make sure max occupancy not violated
-					const value = snapshot.child(id).val();
-					
-					if (value.inputs === value.numPeople) {
-						if (localStorage.getItem(`foodgo_input_${id}`)) {
-							return this.props.history.push(`/${id}/vote`);
-						} else {
-							return this.setState({ ...this.state, 
-																		 location: newLocation,
-																		 fullRoom: true,
-																		 initialized: true, 
-																		 doesKeyExist: key, 
-																		 finishedInput: false });
-						}
+		const id = this.props.idKey;
+		// firebase syntax
+		this.props.db.database().ref('numPeople').once("value", snapshot => {
+			const key = snapshot.hasChild(id);
+			//Check to see if room exists.
+			if (key) {
+				//If room exists check make sure max occupancy not violated
+				const value = snapshot.child(id).val();
+				
+				if (value.inputs === value.numPeople) {
+					if (localStorage.getItem(`foodgo_input_${id}`)) {
+						return this.props.history.push(`/${id}/vote`);
 					} else {
-						if (localStorage.getItem(`foodgo_input_${id}`)) {
-							return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: true });
-						}
+						return this.setState({ ...this.state, 
+																	 location: newLocation,
+																	 fullRoom: true,
+																	 initialized: true, 
+																	 doesKeyExist: key, 
+																	 finishedInput: false });
 					}
-
-					return this.setState({ ...this.state,
-																 location: newLocation,
-																 initialized: true,
-																 doesKeyExist: key,
-																 finishedInput: false });
+				} else {
+					if (localStorage.getItem(`foodgo_input_${id}`)) {
+						return this.setState({ ...this.state, location: newLocation, initialized: true, doesKeyExist: key, finishedInput: true });
+					}
 				}
-				this.setState({ ...this.state,
-											  location: newLocation,
-											  initialized: true,
-											  doesKeyExist: key });
+
+				return this.setState({ ...this.state,
+															 location: newLocation,
+															 initialized: true,
+															 doesKeyExist: key,
+															 finishedInput: false });
+			}
+			this.setState({ ...this.state,
+										  location: newLocation,
+										  initialized: true,
+										  doesKeyExist: key });
 		});
 	}
 
