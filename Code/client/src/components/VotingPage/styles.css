@@ -46,7 +46,7 @@
   height: 445px;
   background-color: #FFF;
   border-radius: 10px;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
   font-size: 14px;
   overflow: hidden;
   user-select: none;
@@ -73,7 +73,7 @@
   top: calc(50% - 264px);
   left: calc(50% - 400px);
   width: 800px;
-  height: 528px;
+  height: 538px;
   box-shadow: 0 10px 50px rgba(0,0,0,0.2);
   transform: none !important;
 }
@@ -137,7 +137,7 @@
               bottom 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 .card_item.expand .card_expand {
-  bottom: 300px;
+  bottom: 310px;
 }
 
 .card_expand:active {
@@ -198,6 +198,7 @@
 
 .card_category,
 .card_distance,
+.card_location,
 .card_left_aside {
   line-height: 30px;
 }
@@ -347,9 +348,10 @@
   height: 32px;
 }
 
-@media (max-width: 400px){
+@media (max-width: 500px){
   .wrapper {
-    height: calc(100vh - 60px);
+    min-height: unset;
+    overflow: visible;
   }
 
   .wrapper_title {
@@ -363,7 +365,16 @@
   }
   .card_item {
     width: 95vw;
+    height: 395px;
     left: calc(50% - 47.5vw);
+    top: calc(50% - 197.5px);
+  }
+  .result_card_item.card_item {
+    height: auto;
+  }
+  .result_card_item .card_img_slide,
+  .result_card_item .card_img {
+    height: 310px;
   }
   .card_item.expand {
     width: 100vw;
@@ -372,6 +383,11 @@
     height: calc(100vh - 60px);
     box-shadow: none;
     border-radius: 0px;
+    touch-action: unset !important;
+  }
+  .card_img_slide,
+  .card_img {
+    height: 310px;
   }
   .card_hide p:last-child {
     display: none;
@@ -392,7 +408,7 @@
 
   .choice {
     position: absolute;
-    top: 562px;
+    top: 512px;
     right: 0;
     margin: auto 17.5%;
   }
@@ -402,5 +418,14 @@
   .no {
     left: 0;
     right: unset;
+  }
+
+  .card_aside,
+  .card_location {
+    display: none;
+  }
+
+  .result_view_button {
+    margin: 10px 0 15px;
   }
 }

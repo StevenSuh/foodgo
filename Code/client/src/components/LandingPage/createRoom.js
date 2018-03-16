@@ -28,14 +28,30 @@ class CreateRoom extends Component {
     if (!this.state.showPopUp) {
       if (this.state.term) {
         let dbCon = this.props.db.database().ref('/numPeople');
-        const dbConRef = dbCon.push({
-          numPeople: parseInt(this.state.term, 10),
-          votes: 0,
-          inputs: 0
+        dbCon.once('value', async snapshot => {
+          const data = snapshot.val();
+          const dataKeys = Object.keys(data);
+
+          const firstCreated = Math.round((Date.now() - data[dataKeys[0]].date)/86400000) || 1;
+          let relativeLength = Math.round(100000/firstCreated);
+          relativeLength = (relativeLength > 100) ? relativeLength : 100;
+
+          if (dataKeys.length >= relativeLength) {
+            delete data[dataKeys[0]];
+            await dbCon.update(data);
+          }
+          const dbConRef = dbCon.push({
+            numPeople: parseInt(this.state.term, 10),
+            votes: 0,
+            inputs: 0,
+            date: Date.now()
+          });
+
+          // display popup
+          this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
         });
 
-        // display popup
-        this.setState({ ...this.state, showPopUp: true, roomKey: dbConRef.key });
+
       }
     } else {
       const goToRoom = document.getElementById('go_to_room');
@@ -87,6 +103,7 @@ class CreateRoom extends Component {
             <button 
               id={classes.createRoom_button}
               onClick={this.onButtonClick}
+              style={{ width: 'auto', whiteSpace: 'nowrap', padding: '0 20px' }}
             >
               Create Room
             </button>

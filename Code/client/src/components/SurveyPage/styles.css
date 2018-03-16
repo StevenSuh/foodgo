@@ -360,9 +360,9 @@
   }
 }
 
-@media (max-width: 400px){
+@media (max-width: 500px){
   .inputPref_box {
-    width: 90%;
+    width: 75%;
     box-shadow: none;
     padding: 0;
     padding-bottom: 25px;
@@ -397,7 +397,6 @@
 
   .items_wrapper {
     width: 90%;
-    top: calc(60px + 2.5%);
   }
 
   .showbox {

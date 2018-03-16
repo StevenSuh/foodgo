@@ -57,7 +57,7 @@ class Card extends Component {
 
     return (
       <div>
-        <h1 style={{ textAlign: 'center', margin: 0, paddingTop: '20px' }}>
+        <h1 className={classes.wrapper_title} style={{ textAlign: 'center', margin: 0, paddingTop: '20px' }}>
           Let's go eat now!
         </h1>
         <div index={this.props.index} className={`${classes.card_item} ${classes.result_card_item}`}>
